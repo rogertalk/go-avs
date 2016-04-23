@@ -9,7 +9,6 @@ import (
 	"mime"
 	"mime/multipart"
 	"net/http"
-	"net/textproto"
 	"strings"
 )
 
@@ -18,35 +17,6 @@ const (
 	DirectivesURL = EndpointURL + "/directives"
 	EventsURL     = EndpointURL + "/events"
 )
-
-var quoteEscaper = strings.NewReplacer("\\", "\\\\", `"`, "\\\"")
-
-func escapeQuotes(s string) string {
-	return quoteEscaper.Replace(s)
-}
-
-// Encodes a JSON value and writes it to a field with the provided multipart writer.
-func writeJSON(writer *multipart.Writer, fieldname string, value interface{}) error {
-	h := make(textproto.MIMEHeader)
-	h.Set("Content-Disposition", fmt.Sprintf(`form-data; name="%s"`, escapeQuotes(fieldname)))
-	h.Set("Content-Type", "application/json; charset=UTF-8")
-	p, err := writer.CreatePart(h)
-	if err != nil {
-		return err
-	}
-	data, err := json.Marshal(value)
-	if err != nil {
-		return err
-	}
-	_, err = p.Write(data)
-	return err
-}
-
-// An AVS client.
-type Client struct {
-}
-
-var DefaultClient = &Client{}
 
 // Request to AVS.
 type Request struct {
@@ -83,11 +53,20 @@ type responsePart struct {
 	Directive *Parcel
 }
 
+// An AVS client.
+type Client struct {
+}
+
+var DefaultClient = &Client{}
+
 // Posts a request to the AVS service.
 func (c *Client) Do(request *Request) (*Response, error) {
 	body := &bytes.Buffer{}
 	writer := multipart.NewWriter(body)
-	writeJSON(writer, "metadata", request)
+	err := writeJSON(writer, "metadata", request)
+	if err != nil {
+		return nil, err
+	}
 	p, err := writer.CreateFormFile("audio", "audio.wav")
 	if err != nil {
 		return nil, err
@@ -129,7 +108,7 @@ func (c *Client) Do(request *Request) (*Response, error) {
 	response := &Response{
 		RequestId:  resp.Header.Get("x-amzn-requestid"),
 		Directives: []TypedParcel{},
-		Content:    make(map[string][]byte),
+		Content:    map[string][]byte{},
 	}
 	for {
 		p, err := mr.NextPart()
