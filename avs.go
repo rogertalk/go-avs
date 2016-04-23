@@ -21,21 +21,21 @@ const (
 // Request to AVS.
 type Request struct {
 	// Access token for the user that this request should be made for.
-	AccessToken string        `json:"-"`
-	Audio       io.Reader     `json:"-"`
-	Context     []TypedParcel `json:"context"`
-	Event       TypedParcel   `json:"event"`
+	AccessToken string         `json:"-"`
+	Audio       io.Reader      `json:"-"`
+	Context     []TypedMessage `json:"context"`
+	Event       TypedMessage   `json:"event"`
 }
 
 func NewRequest(accessToken string) *Request {
 	return &Request{
 		AccessToken: accessToken,
-		Context:     []TypedParcel{},
+		Context:     []TypedMessage{},
 	}
 }
 
-func (r *Request) AddContext(p TypedParcel) {
-	r.Context = append(r.Context, p.GetParcel())
+func (r *Request) AddContext(m TypedMessage) {
+	r.Context = append(r.Context, m.GetMessage())
 }
 
 // Representation of an AVS response.
@@ -43,14 +43,14 @@ type Response struct {
 	// The Amazon request id (for debugging purposes).
 	RequestId string
 	// All the directives in the response.
-	Directives []TypedParcel
+	Directives []TypedMessage
 	// Attachments (usually audio). Key is the Content-ID header value.
 	Content map[string][]byte
 }
 
 // Multipart object returned by AVS.
 type responsePart struct {
-	Directive *Parcel
+	Directive *Message
 }
 
 // An AVS client.
@@ -107,7 +107,7 @@ func (c *Client) Do(request *Request) (*Response, error) {
 	mr := multipart.NewReader(resp.Body, params["boundary"])
 	response := &Response{
 		RequestId:  resp.Header.Get("x-amzn-requestid"),
-		Directives: []TypedParcel{},
+		Directives: []TypedMessage{},
 		Content:    map[string][]byte{},
 	}
 	for {
