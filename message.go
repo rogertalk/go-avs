@@ -108,6 +108,10 @@ type Exception struct {
 	} `json:"payload"`
 }
 
+func (m *Exception) Error() string {
+	return fmt.Sprintf("%s: %s", m.Payload.Code, m.Payload.Description)
+}
+
 // The ExpectSpeech directive.
 type ExpectSpeech struct {
 	*Message
