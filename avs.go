@@ -9,7 +9,6 @@ import (
 	"mime"
 	"mime/multipart"
 	"net/http"
-	"strings"
 )
 
 const (
@@ -98,15 +97,10 @@ func (c *Client) Do(request *Request) (*Response, error) {
 		return nil, fmt.Errorf("request failed with %s", resp.Status)
 	}
 	// Parse the multipart response.
-	mediatype, params, err := mime.ParseMediaType(resp.Header.Get("Content-Type"))
+	mr, err := newMultipartReaderFromResponse(resp)
 	if err != nil {
 		return nil, err
 	}
-	if !strings.HasPrefix(mediatype, "multipart/") {
-		err = fmt.Errorf("unexpected content type %s", mediatype)
-		return nil, err
-	}
-	mr := multipart.NewReader(resp.Body, params["boundary"])
 	response := &Response{
 		RequestId:  resp.Header.Get("x-amzn-requestid"),
 		Directives: []TypedMessage{},
