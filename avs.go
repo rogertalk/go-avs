@@ -15,6 +15,7 @@ const (
 	EndpointURL   = "https://avs-alexa-na.amazon.com/v20160207"
 	DirectivesURL = EndpointURL + "/directives"
 	EventsURL     = EndpointURL + "/events"
+	PingURL       = EndpointURL + "/ping"
 )
 
 // Request to AVS.
@@ -150,4 +151,19 @@ func (c *Client) Do(request *Request) (*Response, error) {
 		}
 	}
 	return response, nil
+}
+
+func (c *Client) Ping(accessToken string) error {
+	// TODO: Once Go supports sending PING frames, that would be a better alternative.
+	req, err := http.NewRequest("GET", PingURL, nil)
+	if err != nil {
+		return err
+	}
+	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", accessToken))
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return err
+	}
+	resp.Body.Close()
+	return nil
 }
