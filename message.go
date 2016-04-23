@@ -160,7 +160,7 @@ type PlaybackState struct {
 		Token                string         `json:"token"`
 		OffsetInMilliseconds float64        `json:"offsetInMilliseconds"`
 		PlayerActivity       PlayerActivity `json:"playerActivity"`
-	}
+	} `json:"payload"`
 }
 
 func NewPlaybackState(token string, offset time.Duration, activity PlayerActivity) *PlaybackState {
