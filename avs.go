@@ -94,7 +94,13 @@ func (c *Client) Do(request *Request) (*Response, error) {
 		return nil, err
 	}
 	defer resp.Body.Close()
-	if resp.StatusCode != 200 {
+	switch resp.StatusCode {
+	case 200:
+		// Keep going.
+	case 204:
+		// No content.
+		return nil, nil
+	default:
 		// Attempt to parse the response as a System.Exception message.
 		data, _ := ioutil.ReadAll(resp.Body)
 		var exception Exception
