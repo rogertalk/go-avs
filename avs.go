@@ -94,6 +94,14 @@ func (c *Client) Do(request *Request) (*Response, error) {
 	}
 	defer resp.Body.Close()
 	if resp.StatusCode != 200 {
+		// Attempt to parse the response as a System.Exception message.
+		data, _ := ioutil.ReadAll(resp.Body)
+		var exception Exception
+		json.Unmarshal(data, &exception)
+		if exception.Payload.Code != "" {
+			return nil, &exception
+		}
+		// Fallback error.
 		return nil, fmt.Errorf("request failed with %s", resp.Status)
 	}
 	// Parse the multipart response.
