@@ -76,10 +76,16 @@ func (m *Message) Typed() TypedMessage {
 		return fill(new(Stop), m)
 	case "SpeechRecognizer.ExpectSpeech":
 		return fill(new(ExpectSpeech), m)
+	case "SpeechRecognizer.ExpectSpeechTimedOut":
+		return fill(new(ExpectSpeechTimedOut), m)
 	case "SpeechRecognizer.Recognize":
 		return fill(new(Recognize), m)
 	case "SpeechSynthesizer.Speak":
 		return fill(new(Speak), m)
+	case "System.Exception":
+		return fill(new(Exception), m)
+	case "System.SynchronizeState":
+		return fill(new(SynchronizeState), m)
 	default:
 		return m
 	}
