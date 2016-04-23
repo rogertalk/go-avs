@@ -159,6 +159,7 @@ func (c *Client) Do(request *Request) (*Response, error) {
 	return response, nil
 }
 
+// Pings AVS on behalf of a user to indicate that the connection is still alive.
 func (c *Client) Ping(accessToken string) error {
 	// TODO: Once Go supports sending PING frames, that would be a better alternative.
 	req, err := http.NewRequest("GET", PingURL, nil)
