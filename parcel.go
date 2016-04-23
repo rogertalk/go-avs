@@ -43,6 +43,13 @@ type Stream struct {
 	URL                  string         `json:"url"`
 }
 
+// An interface that represents both raw Parcel objects and more specifically
+// typed ones. Usually, values of this interface are used with a type switch:
+//	switch d := typedParcel.(type) {
+//	case *Speak:
+//		fmt.Printf("We got a spoken response in format %s.\n", d.Payload.Format)
+//	}
+//
 type TypedParcel interface {
 	GetParcel() *Parcel
 	Typed() TypedParcel
