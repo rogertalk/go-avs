@@ -35,7 +35,7 @@ func NewRequest(accessToken string) *Request {
 }
 
 func (r *Request) AddContext(m TypedMessage) {
-	r.Context = append(r.Context, m.GetMessage())
+	r.Context = append(r.Context, m)
 }
 
 // Representation of an AVS response.
