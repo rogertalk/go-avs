@@ -67,18 +67,20 @@ func (c *Client) Do(request *Request) (*Response, error) {
 	if err != nil {
 		return nil, err
 	}
-	p, err := writer.CreateFormFile("audio", "audio.wav")
-	if err != nil {
-		return nil, err
-	}
-	// TODO: Write the audio data directly to the HTTP/2 socket for faster delivery.
-	_, err = io.Copy(p, request.Audio)
-	if err != nil {
-		return nil, err
-	}
-	err = writer.Close()
-	if err != nil {
-		return nil, err
+	if request.Audio != nil {
+		p, err := writer.CreateFormFile("audio", "audio.wav")
+		if err != nil {
+			return nil, err
+		}
+		// TODO: Write the audio data directly to the HTTP/2 socket for faster delivery.
+		_, err = io.Copy(p, request.Audio)
+		if err != nil {
+			return nil, err
+		}
+		err = writer.Close()
+		if err != nil {
+			return nil, err
+		}
 	}
 	// Send the request to AVS.
 	req, err := http.NewRequest("POST", EventsURL, body)
