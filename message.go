@@ -112,6 +112,27 @@ func (m *Exception) Error() string {
 	return fmt.Sprintf("%s: %s", m.Payload.Code, m.Payload.Description)
 }
 
+// The ExceptionEncountered event.
+type ExceptionEncountered struct {
+	*Message
+	Payload struct {
+		UnparsedDirective string `json:"unparsedDirective"`
+		Error             struct {
+			Type    string `json:"type"`
+			Message string `json:"message"`
+		} `json:"error"`
+	} `json:"payload"`
+}
+
+func NewExceptionEncountered(messageId, directive, errorType, errorMessage string) *ExceptionEncountered {
+	m := new(ExceptionEncountered)
+	m.Message = NewEvent("System", "ExceptionEncountered", messageId, "")
+	m.Payload.UnparsedDirective = directive
+	m.Payload.Error.Type = errorType
+	m.Payload.Error.Message = errorMessage
+	return m
+}
+
 // The ExpectSpeech directive.
 type ExpectSpeech struct {
 	*Message
@@ -209,6 +230,12 @@ func (m *Speak) ContentId() string {
 	return m.Payload.URL[4:]
 }
 
+// The ResetUserInactivity directive.
+type ResetUserInactivity struct {
+	*Message
+	Payload struct{} `json:"payload"`
+}
+
 // The Stop directive.
 type Stop struct {
 	*Message
@@ -224,6 +251,21 @@ type SynchronizeState struct {
 func NewSynchronizeState(messageId string) *SynchronizeState {
 	m := new(SynchronizeState)
 	m.Message = NewEvent("System", "SynchronizeState", messageId, "")
+	return m
+}
+
+// The UserInactivityReport event.
+type UserInactivityReport struct {
+	*Message
+	Payload struct {
+		InactiveTimeInSeconds float64 `json:"inactiveTimeInSeconds"`
+	} `json:"payload"`
+}
+
+func NewUserInactivityReport(messageId string, inactiveTime time.Duration) *UserInactivityReport {
+	m := new(UserInactivityReport)
+	m.Message = NewEvent("System", "UserInactivityReport", messageId, "")
+	m.Payload.InactiveTimeInSeconds = inactiveTime.Seconds()
 	return m
 }
 
