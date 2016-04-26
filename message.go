@@ -63,23 +63,17 @@ func (m *Message) String() string {
 	return fmt.Sprintf("%s.%s", m.Header["namespace"], m.Header["name"])
 }
 
-// Returns a more specific type for this context, event or directive.
+// Returns a more specific type for this message.
 func (m *Message) Typed() TypedMessage {
 	switch m.String() {
 	case "AudioPlayer.ClearQueue":
 		return fill(new(ClearQueue), m)
 	case "AudioPlayer.Play":
 		return fill(new(Play), m)
-	case "AudioPlayer.PlaybackState":
-		return fill(new(PlaybackState), m)
 	case "AudioPlayer.Stop":
 		return fill(new(Stop), m)
 	case "SpeechRecognizer.ExpectSpeech":
 		return fill(new(ExpectSpeech), m)
-	case "SpeechRecognizer.ExpectSpeechTimedOut":
-		return fill(new(ExpectSpeechTimedOut), m)
-	case "SpeechRecognizer.Recognize":
-		return fill(new(Recognize), m)
 	case "SpeechSynthesizer.Speak":
 		return fill(new(Speak), m)
 	case "System.Exception":
