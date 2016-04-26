@@ -59,6 +59,47 @@ type Client struct {
 
 var DefaultClient = &Client{}
 
+// Establishes a persistent connection with AVS and returns a read-only channel
+// through which AVS will deliver directives.
+func (c *Client) CreateDownchannel(accessToken string) (<-chan TypedMessage, error) {
+	req, err := http.NewRequest("GET", DirectivesURL, nil)
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", accessToken))
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	directives := make(chan TypedMessage)
+	go func() {
+		defer close(directives)
+		defer resp.Body.Close()
+		mr, err := newMultipartReaderFromResponse(resp)
+		if err != nil {
+			return
+		}
+		// TODO: Consider reporting errors.
+		for {
+			p, err := mr.NextPart()
+			if err != nil {
+				break
+			}
+			data, err := ioutil.ReadAll(p)
+			if err != nil {
+				break
+			}
+			var response responsePart
+			err = json.Unmarshal(data, &response)
+			if err != nil {
+				break
+			}
+			directives <- response.Directive.Typed()
+		}
+	}()
+	return directives, nil
+}
+
 // Posts a request to the AVS service.
 func (c *Client) Do(request *Request) (*Response, error) {
 	body := &bytes.Buffer{}
