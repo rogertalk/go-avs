@@ -24,8 +24,8 @@ type AudioItem struct {
 type ClearBehavior string
 
 // Possible values for ClearBehavior.
-// TODO: Complete these constants.
 const (
+	ClearBehaviorClearAll      = ClearBehavior("CLEAR_ALL")
 	ClearBehaviorClearEnqueued = ClearBehavior("CLEAR_ENQUEUED")
 )
 
@@ -33,20 +33,22 @@ const (
 type PlayBehavior string
 
 // Possible values for PlayBehavior.
-// TODO: Complete these constants.
 const (
-	PlayBehaviorEnqueue    = PlayBehavior("ENQUEUE")
-	PlayBehaviorReplaceAll = PlayBehavior("REPLACE_ALL")
+	PlayBehaviorEnqueue         = PlayBehavior("ENQUEUE")
+	PlayBehaviorReplaceAll      = PlayBehavior("REPLACE_ALL")
+	PlayBehaviorReplaceEnqueued = PlayBehavior("REPLACE_ENQUEUED")
 )
 
 // A value for what state the device player is in.
 type PlayerActivity string
 
 // Possible values for PlayerActivity.
-// TODO: Complete these constants.
 const (
-	PlayerActivityPlaying  = PlayerActivity("PLAYING")
-	PlayerActivityFinished = PlayerActivity("FINISHED")
+	PlayerActivityBufferUnderrun = PlayerActivity("BUFFER_UNDERRUN")
+	PlayerActivityIdle           = PlayerActivity("IDLE")
+	PlayerActivityPaused         = PlayerActivity("PAUSED")
+	PlayerActivityPlaying        = PlayerActivity("PLAYING")
+	PlayerActivityFinished       = PlayerActivity("FINISHED")
 )
 
 type ProgressReport struct {
