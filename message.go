@@ -316,7 +316,7 @@ type SetAlert struct {
 	Payload struct {
 		Token         string    `json:"token"`
 		Type          AlertType `json:"type"`
-		ScheduledTime time.Time `json:"scheduledTime"`
+		ScheduledTime string    `json:"scheduledTime"`
 	} `json:"payload"`
 }
 
