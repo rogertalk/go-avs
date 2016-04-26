@@ -66,6 +66,10 @@ func (m *Message) String() string {
 // Returns a more specific type for this message.
 func (m *Message) Typed() TypedMessage {
 	switch m.String() {
+	case "Alerts.DeleteAlert":
+		return fill(new(DeleteAlert), m)
+	case "Alerts.SetAlert":
+		return fill(new(SetAlert), m)
 	case "AudioPlayer.ClearQueue":
 		return fill(new(ClearQueue), m)
 	case "AudioPlayer.Play":
@@ -85,12 +89,110 @@ func (m *Message) Typed() TypedMessage {
 	}
 }
 
+// The AlertEnteredBackground event.
+type AlertEnteredBackground struct {
+	*Message
+	Payload struct {
+		Token string `json:"token"`
+	} `json:"payload"`
+}
+
+func NewAlertEnteredBackground(messageId, token string) *AlertEnteredBackground {
+	m := new(AlertEnteredBackground)
+	m.Message = NewEvent("Alerts", "AlertEnteredBackground", messageId, "")
+	m.Payload.Token = token
+	return m
+}
+
+// The AlertEnteredForeground event.
+type AlertEnteredForeground struct {
+	*Message
+	Payload struct {
+		Token string `json:"token"`
+	} `json:"payload"`
+}
+
+func NewAlertEnteredForeground(messageId, token string) *AlertEnteredForeground {
+	m := new(AlertEnteredForeground)
+	m.Message = NewEvent("Alerts", "AlertEnteredForeground", messageId, "")
+	m.Payload.Token = token
+	return m
+}
+
+// The AlertStarted event.
+type AlertStarted struct {
+	*Message
+	Payload struct {
+		Token string `json:"token"`
+	} `json:"payload"`
+}
+
+func NewAlertStarted(messageId, token string) *AlertStarted {
+	m := new(AlertStarted)
+	m.Message = NewEvent("Alerts", "AlertStarted", messageId, "")
+	m.Payload.Token = token
+	return m
+}
+
+// The AlertStopped event.
+type AlertStopped struct {
+	*Message
+	Payload struct {
+		Token string `json:"token"`
+	} `json:"payload"`
+}
+
+func NewAlertStopped(messageId, token string) *AlertStopped {
+	m := new(AlertStopped)
+	m.Message = NewEvent("Alerts", "AlertStopped", messageId, "")
+	m.Payload.Token = token
+	return m
+}
+
 // The ClearQueue directive.
 type ClearQueue struct {
 	*Message
 	Payload struct {
 		ClearBehavior ClearBehavior `json:"clearBehavior"`
 	} `json:"payload"`
+}
+
+// The DeleteAlert directive.
+type DeleteAlert struct {
+	*Message
+	Payload struct {
+		Token string `json:"token"`
+	} `json:"payload"`
+}
+
+// The DeleteAlertFailed event.
+type DeleteAlertFailed struct {
+	*Message
+	Payload struct {
+		Token string `json:"token"`
+	} `json:"payload"`
+}
+
+func NewDeleteAlertFailed(messageId, token string) *DeleteAlertFailed {
+	m := new(DeleteAlertFailed)
+	m.Message = NewEvent("Alerts", "DeleteAlertFailed", messageId, "")
+	m.Payload.Token = token
+	return m
+}
+
+// The DeleteAlertSucceeded event.
+type DeleteAlertSucceeded struct {
+	*Message
+	Payload struct {
+		Token string `json:"token"`
+	} `json:"payload"`
+}
+
+func NewDeleteAlertSucceeded(messageId, token string) *DeleteAlertSucceeded {
+	m := new(DeleteAlertSucceeded)
+	m.Message = NewEvent("Alerts", "DeleteAlertSucceeded", messageId, "")
+	m.Payload.Token = token
+	return m
 }
 
 // The Exception message.
@@ -205,6 +307,46 @@ func NewRecognize(messageId, dialogRequestId string) *Recognize {
 	m.Message = NewEvent("SpeechRecognizer", "Recognize", messageId, dialogRequestId)
 	m.Payload.Format = "AUDIO_L16_RATE_16000_CHANNELS_1"
 	m.Payload.Profile = "CLOSE_TALK"
+	return m
+}
+
+// The SetAlert directive.
+type SetAlert struct {
+	*Message
+	Payload struct {
+		Token         string    `json:"token"`
+		Type          AlertType `json:"type"`
+		ScheduledTime time.Time `json:"scheduledTime"`
+	} `json:"payload"`
+}
+
+// The SetAlertFailed event.
+type SetAlertFailed struct {
+	*Message
+	Payload struct {
+		Token string `json:"token"`
+	} `json:"payload"`
+}
+
+func NewSetAlertFailed(messageId, token string) *SetAlertFailed {
+	m := new(SetAlertFailed)
+	m.Message = NewEvent("Alerts", "SetAlertFailed", messageId, "")
+	m.Payload.Token = token
+	return m
+}
+
+// The SetAlertSucceeded event.
+type SetAlertSucceeded struct {
+	*Message
+	Payload struct {
+		Token string `json:"token"`
+	} `json:"payload"`
+}
+
+func NewSetAlertSucceeded(messageId, token string) *SetAlertSucceeded {
+	m := new(SetAlertSucceeded)
+	m.Message = NewEvent("Alerts", "SetAlertSucceeded", messageId, "")
+	m.Payload.Token = token
 	return m
 }
 

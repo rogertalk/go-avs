@@ -5,6 +5,15 @@ import (
 	"time"
 )
 
+// Alert type.
+type AlertType string
+
+// Possible values for AlertType.
+const (
+	AlertTypeAlarm = AlertType("ALARM")
+	AlertTypeTimer = AlertType("TIMER")
+)
+
 // A streamable audio item.
 type AudioItem struct {
 	AudioItemId string `json:"audioItemId"`
