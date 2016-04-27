@@ -3,7 +3,18 @@ Package avs makes requests to Amazon's AVS API using HTTP/2 and also supports
 creating a downchannel which receives directives from AVS based on the user's
 speech and/or actions in the companion app.
 
-You can make requests to AVS with the Do method:
+To send a Recognize event to AVS, you can use the PostRecognize function:
+
+	audio, _ := os.Open("./request.wav")
+	response, err := avs.PostRecognize(ACCESS_TOKEN, "abc123",
+	                                   "abc123dialog", audio)
+
+For simple events you can use the PostEvent function:
+
+	event := NewVolumeChanged("abc123", 100, false)
+	response, err := avs.PostEvent(ACCESS_TOKEN, event)
+
+You can also make requests to AVS with the Client.Do method:
 
 	request := avs.NewRequest(ACCESS_TOKEN)
 	request.Event = avs.NewRecognize("abc123", "abc123dialog")
@@ -17,14 +28,15 @@ typed by calling the Typed method of Message:
 	for _, directive := range response.Directives {
 		switch d := directive.Typed().(type) {
 		case *avs.Speak:
-			ioutil.WriteFile("./speak.wav", response.Content[d.ContentId()], 0666)
+			cid := d.ContentId()
+			ioutil.WriteFile("./speak.mp3", response.Content[cid], 0666)
 		default:
 			fmt.Println("No code to handle directive:", d)
 		}
 	}
 
-To create a downchannel, which is a long-lived request for AVS to deliver
-directives, use the CreateDownchannel method of the Client type:
+To create a downchannel, a long-lived request for AVS to deliver directives,
+use the CreateDownchannel method of the Client type:
 
 	directives, _ := avs.DefaultClient.CreateDownchannel(ACCESS_TOKEN)
 	for directive := range directives {
@@ -94,6 +106,36 @@ type Response struct {
 	Directives []TypedMessage
 	// Attachments (usually audio). Key is the Content-ID header value.
 	Content map[string][]byte
+}
+
+// PostEvent will post an event to AVS.
+//
+// PostEvent is a wrapper around DefaultClient.Do.
+func PostEvent(accessToken string, event TypedMessage) (*Response, error) {
+	request := NewRequest(accessToken)
+	request.Event = event
+	return DefaultClient.Do(request)
+}
+
+// PostRecognize will post a Recognize event to AVS.
+//
+// PostRecognize is a wrapper around DefaultClient.Do.
+func PostRecognize(accessToken, messageId, dialogRequestId string, audio io.Reader) (*Response, error) {
+	request := NewRequest(accessToken)
+	request.Event = NewRecognize(messageId, dialogRequestId)
+	request.Audio = audio
+	return DefaultClient.Do(request)
+}
+
+// PostSynchronizeState will post a SynchronizeState event with the provided
+// context to AVS.
+//
+// PostSynchronizeState is a wrapper around DefaultClient.Do.
+func PostSynchronizeState(accessToken, messageId string, context []TypedMessage) (*Response, error) {
+	request := NewRequest(accessToken)
+	request.Event = NewSynchronizeState(messageId)
+	request.Context = context
+	return DefaultClient.Do(request)
 }
 
 // Multipart object returned by AVS.

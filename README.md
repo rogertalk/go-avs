@@ -24,11 +24,9 @@ import (
 const ACCESS_TOKEN = "YOUR ACCESS TOKEN"
 
 func main() {
-  request := avs.NewRequest(ACCESS_TOKEN)
-  request.Event = avs.NewRecognize("abc123", "abc123dialog")
   // Record your request into request.wav.
-  request.Audio, _ = os.Open("./request.wav")
-  response, err := avs.DefaultClient.Do(request)
+  audio, _ := os.Open("./request.wav")
+  response, err := avs.PostRecognize(ACCESS_TOKEN, "abc123", "abc123dialog", audio)
   if err != nil {
     fmt.Printf("Failed to call AVS: %v\n", err)
     return
