@@ -354,8 +354,8 @@ func NewSetAlertSucceeded(messageId, token string) *SetAlertSucceeded {
 type Speak struct {
 	*Message
 	Payload struct {
-		Format string
-		URL    string
+		Format string `json:"format"`
+		URL    string `json:"url"`
 	} `json:"payload"`
 }
 
