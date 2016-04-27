@@ -277,9 +277,11 @@ type MuteChanged struct {
 	} `json:"payload"`
 }
 
-func NewMuteChanged(messageId string) *MuteChanged {
+func NewMuteChanged(messageId string, volume int, muted bool) *MuteChanged {
 	m := new(MuteChanged)
 	m.Message = NewEvent("Speaker", "MuteChanged", messageId, "")
+	m.Payload.Volume = volume
+	m.Payload.Muted = muted
 	return m
 }
 
@@ -460,9 +462,11 @@ type VolumeChanged struct {
 	} `json:"payload"`
 }
 
-func NewVolumeChanged(messageId string) *VolumeChanged {
+func NewVolumeChanged(messageId string, volume int, muted bool) *VolumeChanged {
 	m := new(VolumeChanged)
 	m.Message = NewEvent("Speaker", "VolumeChanged", messageId, "")
+	m.Payload.Volume = volume
+	m.Payload.Muted = muted
 	return m
 }
 
