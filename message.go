@@ -76,6 +76,12 @@ func (m *Message) Typed() TypedMessage {
 		return fill(new(Play), m)
 	case "AudioPlayer.Stop":
 		return fill(new(Stop), m)
+	case "Speaker.AdjustVolume":
+		return fill(new(AdjustVolume), m)
+	case "Speaker.SetMute":
+		return fill(new(SetMute), m)
+	case "Speaker.SetVolume":
+		return fill(new(SetVolume), m)
 	case "SpeechRecognizer.ExpectSpeech":
 		return fill(new(ExpectSpeech), m)
 	case "SpeechSynthesizer.Speak":
@@ -87,6 +93,14 @@ func (m *Message) Typed() TypedMessage {
 	default:
 		return m
 	}
+}
+
+// The AdjustVolume directive.
+type AdjustVolume struct {
+	*Message
+	Payload struct {
+		Volume int `json:"volume"`
+	} `json:"payload"`
 }
 
 // The AlertEnteredBackground event.
@@ -253,6 +267,21 @@ func NewExpectSpeechTimedOut(messageId string) *ExpectSpeechTimedOut {
 	return m
 }
 
+// The MuteChanged event.
+type MuteChanged struct {
+	*Message
+	Payload struct {
+		Volume int  `json:"volume"`
+		Muted  bool `json:"muted"`
+	} `json:"payload"`
+}
+
+func NewMuteChanged(messageId string) *MuteChanged {
+	m := new(MuteChanged)
+	m.Message = NewEvent("Speaker", "MuteChanged", messageId, "")
+	return m
+}
+
 // The Play directive.
 type Play struct {
 	*Message
@@ -350,6 +379,22 @@ func NewSetAlertSucceeded(messageId, token string) *SetAlertSucceeded {
 	return m
 }
 
+// The SetMute directive.
+type SetMute struct {
+	*Message
+	Payload struct {
+		Mute bool `json:"mute"`
+	} `json:"payload"`
+}
+
+// The SetVolume directive.
+type SetVolume struct {
+	*Message
+	Payload struct {
+		Volume int `json:"volume"`
+	} `json:"payload"`
+}
+
 // The Speak directive.
 type Speak struct {
 	*Message
@@ -402,6 +447,21 @@ func NewUserInactivityReport(messageId string, inactiveTime time.Duration) *User
 	m := new(UserInactivityReport)
 	m.Message = NewEvent("System", "UserInactivityReport", messageId, "")
 	m.Payload.InactiveTimeInSeconds = inactiveTime.Seconds()
+	return m
+}
+
+// The VolumeChanged event.
+type VolumeChanged struct {
+	*Message
+	Payload struct {
+		Volume int  `json:"volume"`
+		Muted  bool `json:"muted"`
+	} `json:"payload"`
+}
+
+func NewVolumeChanged(messageId string) *VolumeChanged {
+	m := new(VolumeChanged)
+	m.Message = NewEvent("Speaker", "VolumeChanged", messageId, "")
 	return m
 }
 
