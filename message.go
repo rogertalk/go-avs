@@ -8,8 +8,9 @@ import (
 	"time"
 )
 
-// An interface that represents both raw Message objects and more specifically
-// typed ones. Usually, values of this interface are used with a type switch:
+// TypedMessage is an interface that represents both raw Message objects and
+// more specifically typed ones. Usually, values of this interface are used
+// with a type switch:
 //	switch d := typedMessage.(type) {
 //	case *Speak:
 //		fmt.Printf("We got a spoken response in format %s.\n", d.Payload.Format)
@@ -20,13 +21,13 @@ type TypedMessage interface {
 	Typed() TypedMessage
 }
 
-// A general structure for contexts, events and directives.
+// Message is a general structure for contexts, events and directives.
 type Message struct {
 	Header  map[string]string `json:"header"`
 	Payload json.RawMessage   `json:"payload,omitempty"`
 }
 
-// Creates a Message suited for being used as a context value.
+// NewContext creates a Message suited for being used as a context value.
 func NewContext(namespace, name string) *Message {
 	return &Message{
 		Header: map[string]string{
@@ -37,7 +38,7 @@ func NewContext(namespace, name string) *Message {
 	}
 }
 
-// Creates a Message suited for being used as an event value.
+// NewEvent creates a Message suited for being used as an event value.
 func NewEvent(namespace, name, messageId, dialogRequestId string) *Message {
 	m := &Message{
 		Header: map[string]string{
@@ -53,17 +54,17 @@ func NewEvent(namespace, name, messageId, dialogRequestId string) *Message {
 	return m
 }
 
-// Returns a pointer to the underlying Message object.
+// GetMessage returns a pointer to the underlying Message object.
 func (m *Message) GetMessage() *Message {
 	return m
 }
 
-// Returns the namespace and name as a single string.
+// String returns the namespace and name as a single string.
 func (m *Message) String() string {
 	return fmt.Sprintf("%s.%s", m.Header["namespace"], m.Header["name"])
 }
 
-// Returns a more specific type for this message.
+// Typed returns a more specific type for this message.
 func (m *Message) Typed() TypedMessage {
 	switch m.String() {
 	case "Alerts.DeleteAlert":

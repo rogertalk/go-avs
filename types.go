@@ -1,4 +1,3 @@
-//
 package avs
 
 import (
@@ -6,48 +5,56 @@ import (
 	"time"
 )
 
-// Alert type.
+// AlertType specifies the type of an alert.
 type AlertType string
 
 // Possible values for AlertType, used by the SetAlert directive.
 const (
-	// Alarms are scheduled for specific times (e.g., to wake the user up).
+	// AlertTypeAlarm specifies the type for an alarm. Alarms are scheduled for
+	// specific times (e.g., to wake the user up).
 	AlertTypeAlarm = AlertType("ALARM")
-	// Timers count down a certain amount of time (e.g., "timer for 5 minutes").
+	// AlertTypeTimer specifies the type for a timer. Timers count down a certain
+	// amount of time (e.g., "timer for 5 minutes").
 	AlertTypeTimer = AlertType("TIMER")
 )
 
-// A streamable audio item.
+// AudioItem represents an attached or streamable audio item.
 type AudioItem struct {
 	AudioItemId string `json:"audioItemId"`
 	Stream      Stream `json:"stream"`
 }
 
-// How the play queue should be cleared.
+// ClearBehavior specifies how the play queue should be cleared.
 type ClearBehavior string
 
 // Possible values for ClearBehavior.
 const (
-	// Clears all items in the queue, including the current one.
+	// ClearBehaviorClearAll clears all items in the queue, including the current
+	// one.
 	ClearBehaviorClearAll = ClearBehavior("CLEAR_ALL")
-	// Clears all queued items in the queue (not including the current one).
+	// ClearBehaviorClearEnqueued clears all queued items in the queue (not
+	// including the current one).
 	ClearBehaviorClearEnqueued = ClearBehavior("CLEAR_ENQUEUED")
 )
 
-// How an audio item should be inserted into the play queue.
+// PlayBehavior specifies how an audio item should be inserted into the play
+// queue.
 type PlayBehavior string
 
 // Possible values for PlayBehavior.
 const (
-	// Play after current queue of audio.
+	// PlayBehaviorEnqueue specifies that the audio should be played after current
+	// queue of audio.
 	PlayBehaviorEnqueue = PlayBehavior("ENQUEUE")
-	// Play immediately, throwing away all queued audio.
+	// PlayBehaviorReplaceAll specifies that the audio should play immediately,
+	// throwing away all queued audio.
 	PlayBehaviorReplaceAll = PlayBehavior("REPLACE_ALL")
-	// Play after the currently playing audio, replacing all queued audio.
+	// PlayBehaviorReplaceEnqueued specifies that the audio should play after the
+	// currently playing audio, replacing all queued audio.
 	PlayBehaviorReplaceEnqueued = PlayBehavior("REPLACE_ENQUEUED")
 )
 
-// A value for what state the device player is in.
+// PlayerActivity specifies what state the audio player is in.
 type PlayerActivity string
 
 // Possible values for PlayerActivity.
@@ -76,7 +83,8 @@ type Stream struct {
 	URL                  string         `json:"url"`
 }
 
-// If the audio is attached with the response, this returns the content id of that audio.
+// ContentId returns the content id of the audio, if it's attached with the
+// response; otherwise, an empty string.
 func (s *Stream) ContentId() string {
 	if !strings.HasPrefix(s.URL, "cid:") {
 		return ""

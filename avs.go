@@ -53,7 +53,7 @@ import (
 
 // The different endpoints that are supported by the AVS API.
 const (
-	// Base URL for the API, including version.
+	// EndpointURL is the base endpoint URL for the API, including version.
 	// You can find the latest versioning information on the AVS API overview page:
 	// https://developer.amazon.com/public/solutions/alexa/alexa-voice-service/content/avs-api-overview
 	EndpointURL   = "https://avs-alexa-na.amazon.com/v20160207"
@@ -62,7 +62,7 @@ const (
 	PingURL       = EndpointURL + "/ping"
 )
 
-// A request represents an event and optional context to send to AVS.
+// A Request represents an event and optional context to send to AVS.
 type Request struct {
 	// Access token for the user that this request should be made for.
 	AccessToken string         `json:"-"`
@@ -81,12 +81,12 @@ func NewRequest(accessToken string) *Request {
 	}
 }
 
-// Adds a context Message to the Request.
+// AddContext adds a context Message to the Request.
 func (r *Request) AddContext(m TypedMessage) {
 	r.Context = append(r.Context, m)
 }
 
-// Representation of an AVS response.
+// Response represents a response from the AVS API.
 type Response struct {
 	// The Amazon request id (for debugging purposes).
 	RequestId string
@@ -101,15 +101,15 @@ type responsePart struct {
 	Directive *Message
 }
 
-// An AVS client.
+// Client enables making requests and creating downchannels to AVS.
 type Client struct {
 }
 
 // DefaultClient is the default Client.
 var DefaultClient = &Client{}
 
-// Establishes a persistent connection with AVS and returns a read-only channel
-// through which AVS will deliver directives.
+// CreateDownchannel establishes a persistent connection with AVS and returns a
+// read-only channel through which AVS will deliver directives.
 func (c *Client) CreateDownchannel(accessToken string) (<-chan TypedMessage, error) {
 	req, err := http.NewRequest("GET", DirectivesURL, nil)
 	if err != nil {
@@ -149,7 +149,7 @@ func (c *Client) CreateDownchannel(accessToken string) (<-chan TypedMessage, err
 	return directives, nil
 }
 
-// Posts a request to the AVS service.
+// Do posts a request to the AVS service.
 func (c *Client) Do(request *Request) (*Response, error) {
 	body := &bytes.Buffer{}
 	writer := multipart.NewWriter(body)
@@ -249,7 +249,8 @@ func (c *Client) Do(request *Request) (*Response, error) {
 	return response, nil
 }
 
-// Pings AVS on behalf of a user to indicate that the connection is still alive.
+// Ping will ping AVS on behalf of a user to indicate that the connection is
+// still alive.
 func (c *Client) Ping(accessToken string) error {
 	// TODO: Once Go supports sending PING frames, that would be a better alternative.
 	req, err := http.NewRequest("GET", PingURL, nil)
