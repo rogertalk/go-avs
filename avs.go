@@ -120,6 +120,10 @@ func (c *Client) CreateDownchannel(accessToken string) (<-chan TypedMessage, err
 	if err != nil {
 		return nil, err
 	}
+	if more, err := checkStatusCode(resp); !more {
+		resp.Body.Close()
+		return nil, err
+	}
 	directives := make(chan TypedMessage)
 	go func() {
 		defer close(directives)
@@ -184,22 +188,8 @@ func (c *Client) Do(request *Request) (*Response, error) {
 		return nil, err
 	}
 	defer resp.Body.Close()
-	switch resp.StatusCode {
-	case 200:
-		// Keep going.
-	case 204:
-		// No content.
-		return nil, nil
-	default:
-		// Attempt to parse the response as a System.Exception message.
-		data, _ := ioutil.ReadAll(resp.Body)
-		var exception Exception
-		json.Unmarshal(data, &exception)
-		if exception.Payload.Code != "" {
-			return nil, &exception
-		}
-		// Fallback error.
-		return nil, fmt.Errorf("request failed with %s", resp.Status)
+	if more, err := checkStatusCode(resp); !more {
+		return nil, err
 	}
 	// Parse the multipart response.
 	mr, err := newMultipartReaderFromResponse(resp)
@@ -262,6 +252,32 @@ func (c *Client) Ping(accessToken string) error {
 	if err != nil {
 		return err
 	}
-	resp.Body.Close()
-	return nil
+	defer resp.Body.Close()
+	_, err = checkStatusCode(resp)
+	return err
+}
+
+// checkStatusCode checks the status code of the response and returns whether
+// the caller should expect there to be more content, as well as any error.
+//
+// This function should only be called before the body has been read.
+func checkStatusCode(resp *http.Response) (more bool, err error) {
+	switch resp.StatusCode {
+	case 200:
+		// Keep going.
+		return true, nil
+	case 204:
+		// No content.
+		return false, nil
+	default:
+		// Attempt to parse the response as a System.Exception message.
+		data, _ := ioutil.ReadAll(resp.Body)
+		var exception Exception
+		json.Unmarshal(data, &exception)
+		if exception.Payload.Code != "" {
+			return false, &exception
+		}
+		// Fallback error.
+		return false, fmt.Errorf("request failed with %s", resp.Status)
+	}
 }
