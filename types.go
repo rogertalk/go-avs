@@ -1,3 +1,4 @@
+//
 package avs
 
 import (
@@ -8,9 +9,11 @@ import (
 // Alert type.
 type AlertType string
 
-// Possible values for AlertType.
+// Possible values for AlertType, used by the SetAlert directive.
 const (
+	// Alarms are scheduled for specific times (e.g., to wake the user up).
 	AlertTypeAlarm = AlertType("ALARM")
+	// Timers count down a certain amount of time (e.g., "timer for 5 minutes").
 	AlertTypeTimer = AlertType("TIMER")
 )
 
@@ -25,7 +28,9 @@ type ClearBehavior string
 
 // Possible values for ClearBehavior.
 const (
-	ClearBehaviorClearAll      = ClearBehavior("CLEAR_ALL")
+	// Clears all items in the queue, including the current one.
+	ClearBehaviorClearAll = ClearBehavior("CLEAR_ALL")
+	// Clears all queued items in the queue (not including the current one).
 	ClearBehaviorClearEnqueued = ClearBehavior("CLEAR_ENQUEUED")
 )
 
@@ -34,8 +39,11 @@ type PlayBehavior string
 
 // Possible values for PlayBehavior.
 const (
-	PlayBehaviorEnqueue         = PlayBehavior("ENQUEUE")
-	PlayBehaviorReplaceAll      = PlayBehavior("REPLACE_ALL")
+	// Play after current queue of audio.
+	PlayBehaviorEnqueue = PlayBehavior("ENQUEUE")
+	// Play immediately, throwing away all queued audio.
+	PlayBehaviorReplaceAll = PlayBehavior("REPLACE_ALL")
+	// Play after the currently playing audio, replacing all queued audio.
 	PlayBehaviorReplaceEnqueued = PlayBehavior("REPLACE_ENQUEUED")
 )
 
@@ -59,6 +67,7 @@ func (p *ProgressReport) Interval() time.Duration {
 	return time.Duration(p.ProgressReportIntervalInMilliseconds) * time.Millisecond
 }
 
+// An audio stream which can either be attached with the response or a remote URL.
 type Stream struct {
 	ExpiryTime           string         `json:"expiryTime"`
 	OffsetInMilliseconds float64        `json:"offsetInMilliseconds"`
@@ -67,6 +76,7 @@ type Stream struct {
 	URL                  string         `json:"url"`
 }
 
+// If the audio is attached with the response, this returns the content id of that audio.
 func (s *Stream) ContentId() string {
 	if !strings.HasPrefix(s.URL, "cid:") {
 		return ""

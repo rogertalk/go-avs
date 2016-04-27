@@ -1,3 +1,43 @@
+/*
+Package avs makes requests to Amazon's AVS API using HTTP/2 and also supports
+creating a downchannel which receives directives from AVS based on the user's
+speech and/or actions in the companion app.
+
+You can make requests to AVS with the Do method:
+
+	request := avs.NewRequest(ACCESS_TOKEN)
+	request.Event = avs.NewRecognize("abc123", "abc123dialog")
+	request.Audio, _ = os.Open("./request.wav")
+	response, err := avs.DefaultClient.Do(request)
+
+A Response will contain a list of directives from AVS. The list contains untyped
+Message instances which hold the raw response data and headers, but it can be
+typed by calling the Typed method of Message:
+
+	for _, directive := range response.Directives {
+	  switch d := directive.Typed().(type) {
+	  case *avs.Speak:
+	    ioutil.WriteFile("./speak.wav", response.Content[d.ContentId()], 0666)
+	  default:
+	    fmt.Println("No code to handle directive:", d)
+	  }
+	}
+
+To create a downchannel, which is a long-lived request for AVS to deliver
+directives, use the CreateDownchannel method of the Client type:
+
+	directives, _ := avs.DefaultClient.CreateDownchannel(ACCESS_TOKEN)
+  for directive := range directives {
+    switch d := directive.Typed().(type) {
+    case *avs.DeleteAlert:
+      fmt.Println("Delete alert:", d.Payload.Token)
+    case *avs.SetAlert:
+      fmt.Println("Set an alert for:", d.Payload.ScheduledTime)
+    default:
+      fmt.Println("No code to handle directive:", d)
+    }
+  }
+*/
 package avs
 
 import (
@@ -11,14 +51,18 @@ import (
 	"net/http"
 )
 
+// The different endpoints that are supported by the AVS API.
 const (
+	// Base URL for the API, including version.
+	// You can find the latest versioning information on the AVS API overview page:
+	// https://developer.amazon.com/public/solutions/alexa/alexa-voice-service/content/avs-api-overview
 	EndpointURL   = "https://avs-alexa-na.amazon.com/v20160207"
 	DirectivesURL = EndpointURL + "/directives"
 	EventsURL     = EndpointURL + "/events"
 	PingURL       = EndpointURL + "/ping"
 )
 
-// Request to AVS.
+// A request represents an event and optional context to send to AVS.
 type Request struct {
 	// Access token for the user that this request should be made for.
 	AccessToken string         `json:"-"`
@@ -27,6 +71,9 @@ type Request struct {
 	Event       TypedMessage   `json:"event"`
 }
 
+// NewRequest returns a new Request given an access token.
+//
+// The Request is suitable for use with Client.Do.
 func NewRequest(accessToken string) *Request {
 	return &Request{
 		AccessToken: accessToken,
@@ -34,6 +81,7 @@ func NewRequest(accessToken string) *Request {
 	}
 }
 
+// Adds a context Message to the Request.
 func (r *Request) AddContext(m TypedMessage) {
 	r.Context = append(r.Context, m)
 }
@@ -57,6 +105,7 @@ type responsePart struct {
 type Client struct {
 }
 
+// DefaultClient is the default Client.
 var DefaultClient = &Client{}
 
 // Establishes a persistent connection with AVS and returns a read-only channel
