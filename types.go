@@ -37,6 +37,22 @@ const (
 	ClearBehaviorClearEnqueued = ClearBehavior("CLEAR_ENQUEUED")
 )
 
+// ErrorType specifies the types of errors that the client may report to AVS.
+type ErrorType string
+
+// Possible values for ErrorType.
+const (
+	// ErrorTypeInternalError should be reported when none of the other error
+	// types is applicable.
+	ErrorTypeInternalError = ErrorType("INTERNAL_ERROR")
+	// ErrorTypeUnexpectedInformation should be reported when the client is unable
+	// to handle the received directive due to invalid format or data.
+	ErrorTypeUnexpectedInformation = ErrorType("UNEXPECTED_INFORMATION_RECEIVED")
+	// ErrorTypeUnsupportedOperation should be reported when the client is unable
+	// to perform the operation specified by the directive.
+	ErrorTypeUnsupportedOperation = ErrorType("UNSUPPORTED_OPERATION")
+)
+
 // PlayBehavior specifies how an audio item should be inserted into the play
 // queue.
 type PlayBehavior string

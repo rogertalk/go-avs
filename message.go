@@ -229,13 +229,13 @@ type ExceptionEncountered struct {
 	Payload struct {
 		UnparsedDirective string `json:"unparsedDirective"`
 		Error             struct {
-			Type    string `json:"type"`
-			Message string `json:"message"`
+			Type    ErrorType `json:"type"`
+			Message string    `json:"message"`
 		} `json:"error"`
 	} `json:"payload"`
 }
 
-func NewExceptionEncountered(messageId, directive, errorType, errorMessage string) *ExceptionEncountered {
+func NewExceptionEncountered(messageId, directive string, errorType ErrorType, errorMessage string) *ExceptionEncountered {
 	m := new(ExceptionEncountered)
 	m.Message = NewEvent("System", "ExceptionEncountered", messageId, "")
 	m.Payload.UnparsedDirective = directive
