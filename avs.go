@@ -15,28 +15,28 @@ Message instances which hold the raw response data and headers, but it can be
 typed by calling the Typed method of Message:
 
 	for _, directive := range response.Directives {
-	  switch d := directive.Typed().(type) {
-	  case *avs.Speak:
-	    ioutil.WriteFile("./speak.wav", response.Content[d.ContentId()], 0666)
-	  default:
-	    fmt.Println("No code to handle directive:", d)
-	  }
+		switch d := directive.Typed().(type) {
+		case *avs.Speak:
+			ioutil.WriteFile("./speak.wav", response.Content[d.ContentId()], 0666)
+		default:
+			fmt.Println("No code to handle directive:", d)
+		}
 	}
 
 To create a downchannel, which is a long-lived request for AVS to deliver
 directives, use the CreateDownchannel method of the Client type:
 
 	directives, _ := avs.DefaultClient.CreateDownchannel(ACCESS_TOKEN)
-  for directive := range directives {
-    switch d := directive.Typed().(type) {
-    case *avs.DeleteAlert:
-      fmt.Println("Delete alert:", d.Payload.Token)
-    case *avs.SetAlert:
-      fmt.Println("Set an alert for:", d.Payload.ScheduledTime)
-    default:
-      fmt.Println("No code to handle directive:", d)
-    }
-  }
+	for directive := range directives {
+		switch d := directive.Typed().(type) {
+		case *avs.DeleteAlert:
+			fmt.Println("Delete alert:", d.Payload.Token)
+		case *avs.SetAlert:
+			fmt.Println("Set an alert for:", d.Payload.ScheduledTime)
+		default:
+			fmt.Println("No code to handle directive:", d)
+		}
+	}
 */
 package avs
 
