@@ -74,7 +74,7 @@ var DefaultClient = &Client{}
 // read-only channel through which AVS will deliver directives.
 //
 // CreateDownchannel is a wrapper around DefaultClient.CreateDownchannel.
-func CreateDownchannel(accessToken string) (<-chan TypedMessage, error) {
+func CreateDownchannel(accessToken string) (<-chan *Message, error) {
 	return DefaultClient.CreateDownchannel(accessToken)
 }
 

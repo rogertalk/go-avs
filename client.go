@@ -22,7 +22,7 @@ type Client struct {
 
 // CreateDownchannel establishes a persistent connection with AVS and returns a
 // read-only channel through which AVS will deliver directives.
-func (c *Client) CreateDownchannel(accessToken string) (<-chan TypedMessage, error) {
+func (c *Client) CreateDownchannel(accessToken string) (<-chan *Message, error) {
 	req, err := http.NewRequest("GET", DirectivesURL, nil)
 	if err != nil {
 		return nil, err
@@ -36,7 +36,7 @@ func (c *Client) CreateDownchannel(accessToken string) (<-chan TypedMessage, err
 		resp.Body.Close()
 		return nil, err
 	}
-	directives := make(chan TypedMessage)
+	directives := make(chan *Message)
 	go func() {
 		defer close(directives)
 		defer resp.Body.Close()
@@ -59,7 +59,7 @@ func (c *Client) CreateDownchannel(accessToken string) (<-chan TypedMessage, err
 			if err != nil {
 				break
 			}
-			directives <- response.Directive.Typed()
+			directives <- response.Directive
 		}
 	}()
 	return directives, nil
@@ -110,7 +110,7 @@ func (c *Client) Do(request *Request) (*Response, error) {
 	}
 	response := &Response{
 		RequestId:  resp.Header.Get("x-amzn-requestid"),
-		Directives: []TypedMessage{},
+		Directives: []*Message{},
 		Content:    map[string][]byte{},
 	}
 	for {

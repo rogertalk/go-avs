@@ -5,7 +5,7 @@ type Response struct {
 	// The Amazon request id (for debugging purposes).
 	RequestId string
 	// All the directives in the response.
-	Directives []TypedMessage
+	Directives []*Message
 	// Attachments (usually audio). Key is the Content-ID header value.
 	Content map[string][]byte
 }
