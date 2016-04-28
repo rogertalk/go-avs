@@ -33,8 +33,8 @@ func main() {
     fmt.Printf("Failed to call AVS: %v\n", err)
     return
   }
-  // Response will be nil if AVS gave an empty response.
-  if response == nil {
+  // AVS might not return any directives in some cases.
+  if len(response.Directives) == 0 {
     fmt.Println("Alexa had nothing to say.")
     return
   }

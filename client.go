@@ -100,11 +100,7 @@ func (c *Client) Do(request *Request) (*Response, error) {
 		return nil, err
 	}
 	defer resp.Body.Close()
-	if more, err := checkStatusCode(resp); !more {
-		return nil, err
-	}
-	// Parse the multipart response.
-	mr, err := newMultipartReaderFromResponse(resp)
+	more, err := checkStatusCode(resp)
 	if err != nil {
 		return nil, err
 	}
@@ -112,6 +108,15 @@ func (c *Client) Do(request *Request) (*Response, error) {
 		RequestId:  resp.Header.Get("x-amzn-requestid"),
 		Directives: []*Message{},
 		Content:    map[string][]byte{},
+	}
+	if !more {
+		// AVS returned an empty response, so there's nothing to parse.
+		return response, nil
+	}
+	// Parse the multipart response.
+	mr, err := newMultipartReaderFromResponse(resp)
+	if err != nil {
+		return nil, err
 	}
 	for {
 		p, err := mr.NextPart()
