@@ -4,8 +4,8 @@ import (
 	"time"
 )
 
-// NewContext creates a Message suited for being used as a context value.
-func NewContext(namespace, name string) *Message {
+// newContext creates a Message suited for being used as a context value.
+func newContext(namespace, name string) *Message {
 	return &Message{
 		Header: map[string]string{
 			"namespace": namespace,
@@ -28,7 +28,7 @@ type AlertsState struct {
 
 func NewAlertsState(allAlerts, activeAlerts []Alert) *AlertsState {
 	m := new(AlertsState)
-	m.Message = NewContext("Alerts", "AlertsState")
+	m.Message = newContext("Alerts", "AlertsState")
 	m.Payload.AllAlerts = allAlerts
 	m.Payload.ActiveAlerts = activeAlerts
 	return m
@@ -48,7 +48,7 @@ type PlaybackState struct {
 
 func NewPlaybackState(token string, offset time.Duration, activity PlayerActivity) *PlaybackState {
 	m := new(PlaybackState)
-	m.Message = NewContext("AudioPlayer", "PlaybackState")
+	m.Message = newContext("AudioPlayer", "PlaybackState")
 	m.Payload.OffsetInMilliseconds = int(offset.Seconds() * 1000)
 	m.Payload.PlayerActivity = activity
 	m.Payload.Token = token
@@ -68,7 +68,7 @@ type VolumeState struct {
 
 func NewVolumeState(volume int, muted bool) *VolumeState {
 	m := new(VolumeState)
-	m.Message = NewContext("Speaker", "VolumeState")
+	m.Message = newContext("Speaker", "VolumeState")
 	m.Payload.Volume = volume
 	m.Payload.Muted = muted
 	return m
@@ -88,7 +88,7 @@ type SpeechState struct {
 
 func NewSpeechState(token string, offset time.Duration, playerActivity PlayerActivity) *SpeechState {
 	m := new(SpeechState)
-	m.Message = NewContext("SpeechSynthesizer", "SpeechState")
+	m.Message = newContext("SpeechSynthesizer", "SpeechState")
 	m.Payload.Token = token
 	m.Payload.OffsetInMilliseconds = int(offset.Seconds() * 1000)
 	m.Payload.PlayerActivity = playerActivity

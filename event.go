@@ -4,8 +4,8 @@ import (
 	"time"
 )
 
-// NewEvent creates a Message suited for being used as an event value.
-func NewEvent(namespace, name, messageId, dialogRequestId string) *Message {
+// newEvent creates a Message suited for being used as an event value.
+func newEvent(namespace, name, messageId, dialogRequestId string) *Message {
 	m := &Message{
 		Header: map[string]string{
 			"namespace": namespace,
@@ -32,7 +32,7 @@ type AlertEnteredBackground struct {
 
 func NewAlertEnteredBackground(messageId, token string) *AlertEnteredBackground {
 	m := new(AlertEnteredBackground)
-	m.Message = NewEvent("Alerts", "AlertEnteredBackground", messageId, "")
+	m.Message = newEvent("Alerts", "AlertEnteredBackground", messageId, "")
 	m.Payload.Token = token
 	return m
 }
@@ -47,7 +47,7 @@ type AlertEnteredForeground struct {
 
 func NewAlertEnteredForeground(messageId, token string) *AlertEnteredForeground {
 	m := new(AlertEnteredForeground)
-	m.Message = NewEvent("Alerts", "AlertEnteredForeground", messageId, "")
+	m.Message = newEvent("Alerts", "AlertEnteredForeground", messageId, "")
 	m.Payload.Token = token
 	return m
 }
@@ -62,7 +62,7 @@ type AlertStarted struct {
 
 func NewAlertStarted(messageId, token string) *AlertStarted {
 	m := new(AlertStarted)
-	m.Message = NewEvent("Alerts", "AlertStarted", messageId, "")
+	m.Message = newEvent("Alerts", "AlertStarted", messageId, "")
 	m.Payload.Token = token
 	return m
 }
@@ -77,7 +77,7 @@ type AlertStopped struct {
 
 func NewAlertStopped(messageId, token string) *AlertStopped {
 	m := new(AlertStopped)
-	m.Message = NewEvent("Alerts", "AlertStopped", messageId, "")
+	m.Message = newEvent("Alerts", "AlertStopped", messageId, "")
 	m.Payload.Token = token
 	return m
 }
@@ -92,7 +92,7 @@ type DeleteAlertFailed struct {
 
 func NewDeleteAlertFailed(messageId, token string) *DeleteAlertFailed {
 	m := new(DeleteAlertFailed)
-	m.Message = NewEvent("Alerts", "DeleteAlertFailed", messageId, "")
+	m.Message = newEvent("Alerts", "DeleteAlertFailed", messageId, "")
 	m.Payload.Token = token
 	return m
 }
@@ -107,7 +107,7 @@ type DeleteAlertSucceeded struct {
 
 func NewDeleteAlertSucceeded(messageId, token string) *DeleteAlertSucceeded {
 	m := new(DeleteAlertSucceeded)
-	m.Message = NewEvent("Alerts", "DeleteAlertSucceeded", messageId, "")
+	m.Message = newEvent("Alerts", "DeleteAlertSucceeded", messageId, "")
 	m.Payload.Token = token
 	return m
 }
@@ -122,7 +122,7 @@ type SetAlertFailed struct {
 
 func NewSetAlertFailed(messageId, token string) *SetAlertFailed {
 	m := new(SetAlertFailed)
-	m.Message = NewEvent("Alerts", "SetAlertFailed", messageId, "")
+	m.Message = newEvent("Alerts", "SetAlertFailed", messageId, "")
 	m.Payload.Token = token
 	return m
 }
@@ -137,7 +137,7 @@ type SetAlertSucceeded struct {
 
 func NewSetAlertSucceeded(messageId, token string) *SetAlertSucceeded {
 	m := new(SetAlertSucceeded)
-	m.Message = NewEvent("Alerts", "SetAlertSucceeded", messageId, "")
+	m.Message = newEvent("Alerts", "SetAlertSucceeded", messageId, "")
 	m.Payload.Token = token
 	return m
 }
@@ -163,7 +163,7 @@ type PlaybackFailed struct {
 
 func NewPlaybackFailed(messageId, token string, errorType MediaErrorType, errorMessage string) *PlaybackFailed {
 	m := new(PlaybackFailed)
-	m.Message = NewEvent("AudioPlayer", "PlaybackFailed", messageId, "")
+	m.Message = newEvent("AudioPlayer", "PlaybackFailed", messageId, "")
 	m.Payload.Token = token
 	m.Payload.Error.Type = errorType
 	m.Payload.Error.Message = errorMessage
@@ -181,7 +181,7 @@ type PlaybackFinished struct {
 
 func NewPlaybackFinished(messageId, token string, offset time.Duration) *PlaybackFinished {
 	m := new(PlaybackFinished)
-	m.Message = NewEvent("AudioPlayer", "PlaybackFinished", messageId, "")
+	m.Message = newEvent("AudioPlayer", "PlaybackFinished", messageId, "")
 	m.Payload.Token = token
 	m.Payload.OffsetInMilliseconds = int(offset.Seconds() * 1000)
 	return m
@@ -198,7 +198,7 @@ type PlaybackNearlyFinished struct {
 
 func NewPlaybackNearlyFinished(messageId, token string, offset time.Duration) *PlaybackNearlyFinished {
 	m := new(PlaybackNearlyFinished)
-	m.Message = NewEvent("AudioPlayer", "PlaybackNearlyFinished", messageId, "")
+	m.Message = newEvent("AudioPlayer", "PlaybackNearlyFinished", messageId, "")
 	m.Payload.Token = token
 	m.Payload.OffsetInMilliseconds = int(offset.Seconds() * 1000)
 	return m
@@ -215,7 +215,7 @@ type PlaybackPaused struct {
 
 func NewPlaybackPaused(messageId, token string, offset time.Duration) *PlaybackPaused {
 	m := new(PlaybackPaused)
-	m.Message = NewEvent("AudioPlayer", "PlaybackPaused", messageId, "")
+	m.Message = newEvent("AudioPlayer", "PlaybackPaused", messageId, "")
 	m.Payload.Token = token
 	m.Payload.OffsetInMilliseconds = int(offset.Seconds() * 1000)
 	return m
@@ -229,7 +229,7 @@ type PlaybackQueueCleared struct {
 
 func NewPlaybackQueueCleared(messageId, token string, offset time.Duration) *PlaybackQueueCleared {
 	m := new(PlaybackQueueCleared)
-	m.Message = NewEvent("AudioPlayer", "PlaybackQueueCleared", messageId, "")
+	m.Message = newEvent("AudioPlayer", "PlaybackQueueCleared", messageId, "")
 	return m
 }
 
@@ -244,7 +244,7 @@ type PlaybackResumed struct {
 
 func NewPlaybackResumed(messageId, token string, offset time.Duration) *PlaybackResumed {
 	m := new(PlaybackResumed)
-	m.Message = NewEvent("AudioPlayer", "PlaybackResumed", messageId, "")
+	m.Message = newEvent("AudioPlayer", "PlaybackResumed", messageId, "")
 	m.Payload.Token = token
 	m.Payload.OffsetInMilliseconds = int(offset.Seconds() * 1000)
 	return m
@@ -261,7 +261,7 @@ type PlaybackStarted struct {
 
 func NewPlaybackStarted(messageId, token string, offset time.Duration) *PlaybackStarted {
 	m := new(PlaybackStarted)
-	m.Message = NewEvent("AudioPlayer", "PlaybackStarted", messageId, "")
+	m.Message = newEvent("AudioPlayer", "PlaybackStarted", messageId, "")
 	m.Payload.Token = token
 	m.Payload.OffsetInMilliseconds = int(offset.Seconds() * 1000)
 	return m
@@ -278,7 +278,7 @@ type PlaybackStopped struct {
 
 func NewPlaybackStopped(messageId, token string, offset time.Duration) *PlaybackStopped {
 	m := new(PlaybackStopped)
-	m.Message = NewEvent("AudioPlayer", "PlaybackStopped", messageId, "")
+	m.Message = newEvent("AudioPlayer", "PlaybackStopped", messageId, "")
 	m.Payload.Token = token
 	m.Payload.OffsetInMilliseconds = int(offset.Seconds() * 1000)
 	return m
@@ -295,7 +295,7 @@ type PlaybackStutterStarted struct {
 
 func NewPlaybackStutterStarted(messageId, token string, offset time.Duration) *PlaybackStutterStarted {
 	m := new(PlaybackStutterStarted)
-	m.Message = NewEvent("AudioPlayer", "PlaybackStutterStarted", messageId, "")
+	m.Message = newEvent("AudioPlayer", "PlaybackStutterStarted", messageId, "")
 	m.Payload.Token = token
 	m.Payload.OffsetInMilliseconds = int(offset.Seconds() * 1000)
 	return m
@@ -313,7 +313,7 @@ type PlaybackStutterFinished struct {
 
 func NewPlaybackStutterFinished(messageId, token string, offset, stutterDuration time.Duration) *PlaybackStutterFinished {
 	m := new(PlaybackStutterFinished)
-	m.Message = NewEvent("AudioPlayer", "PlaybackStutterFinished", messageId, "")
+	m.Message = newEvent("AudioPlayer", "PlaybackStutterFinished", messageId, "")
 	m.Payload.Token = token
 	m.Payload.OffsetInMilliseconds = int(offset.Seconds() * 1000)
 	m.Payload.StutterDurationInMilliseconds = int(stutterDuration.Seconds() * 1000)
@@ -331,7 +331,7 @@ type ProgressReportDelayElapsed struct {
 
 func NewProgressReportDelayElapsed(messageId, token string, offset time.Duration) *ProgressReportDelayElapsed {
 	m := new(ProgressReportDelayElapsed)
-	m.Message = NewEvent("AudioPlayer", "ProgressReportDelayElapsed", messageId, "")
+	m.Message = newEvent("AudioPlayer", "ProgressReportDelayElapsed", messageId, "")
 	m.Payload.Token = token
 	m.Payload.OffsetInMilliseconds = int(offset.Seconds() * 1000)
 	return m
@@ -348,7 +348,7 @@ type ProgressReportIntervalElapsed struct {
 
 func NewProgressReportIntervalElapsed(messageId, token string, offset time.Duration) *ProgressReportIntervalElapsed {
 	m := new(ProgressReportIntervalElapsed)
-	m.Message = NewEvent("AudioPlayer", "ProgressReportIntervalElapsed", messageId, "")
+	m.Message = newEvent("AudioPlayer", "ProgressReportIntervalElapsed", messageId, "")
 	m.Payload.Token = token
 	m.Payload.OffsetInMilliseconds = int(offset.Seconds() * 1000)
 	return m
@@ -365,7 +365,7 @@ type StreamMetadataExtracted struct {
 
 func NewStreamMetadataExtracted(messageId, token string, metadata map[string]interface{}) *StreamMetadataExtracted {
 	m := new(StreamMetadataExtracted)
-	m.Message = NewEvent("AudioPlayer", "StreamMetadataExtracted", messageId, "")
+	m.Message = newEvent("AudioPlayer", "StreamMetadataExtracted", messageId, "")
 	m.Payload.Token = token
 	m.Payload.Metadata = metadata
 	return m
@@ -381,7 +381,7 @@ type NextCommandIssued struct {
 
 func NewNextCommandIssued(messageId string) *NextCommandIssued {
 	m := new(NextCommandIssued)
-	m.Message = NewEvent("PlaybackController", "NextCommandIssued", messageId, "")
+	m.Message = newEvent("PlaybackController", "NextCommandIssued", messageId, "")
 	return m
 }
 
@@ -393,7 +393,7 @@ type PauseCommandIssued struct {
 
 func NewPauseCommandIssued(messageId string) *PauseCommandIssued {
 	m := new(PauseCommandIssued)
-	m.Message = NewEvent("PlaybackController", "PauseCommandIssued", messageId, "")
+	m.Message = newEvent("PlaybackController", "PauseCommandIssued", messageId, "")
 	return m
 }
 
@@ -405,7 +405,7 @@ type PlayCommandIssued struct {
 
 func NewPlayCommandIssued(messageId string) *PlayCommandIssued {
 	m := new(PlayCommandIssued)
-	m.Message = NewEvent("PlaybackController", "PlayCommandIssued", messageId, "")
+	m.Message = newEvent("PlaybackController", "PlayCommandIssued", messageId, "")
 	return m
 }
 
@@ -417,7 +417,7 @@ type PreviousCommandIssued struct {
 
 func NewPreviousCommandIssued(messageId string) *PreviousCommandIssued {
 	m := new(PreviousCommandIssued)
-	m.Message = NewEvent("PlaybackController", "PreviousCommandIssued", messageId, "")
+	m.Message = newEvent("PlaybackController", "PreviousCommandIssued", messageId, "")
 	return m
 }
 
@@ -434,7 +434,7 @@ type MuteChanged struct {
 
 func NewMuteChanged(messageId string, volume int, muted bool) *MuteChanged {
 	m := new(MuteChanged)
-	m.Message = NewEvent("Speaker", "MuteChanged", messageId, "")
+	m.Message = newEvent("Speaker", "MuteChanged", messageId, "")
 	m.Payload.Volume = volume
 	m.Payload.Muted = muted
 	return m
@@ -451,7 +451,7 @@ type VolumeChanged struct {
 
 func NewVolumeChanged(messageId string, volume int, muted bool) *VolumeChanged {
 	m := new(VolumeChanged)
-	m.Message = NewEvent("Speaker", "VolumeChanged", messageId, "")
+	m.Message = newEvent("Speaker", "VolumeChanged", messageId, "")
 	m.Payload.Volume = volume
 	m.Payload.Muted = muted
 	return m
@@ -467,7 +467,7 @@ type ExpectSpeechTimedOut struct {
 
 func NewExpectSpeechTimedOut(messageId string) *ExpectSpeechTimedOut {
 	m := new(ExpectSpeechTimedOut)
-	m.Message = NewEvent("SpeechRecognizer", "ExpectSpeechTimedOut", messageId, "")
+	m.Message = newEvent("SpeechRecognizer", "ExpectSpeechTimedOut", messageId, "")
 	return m
 }
 
@@ -482,7 +482,7 @@ type Recognize struct {
 
 func NewRecognize(messageId, dialogRequestId string) *Recognize {
 	m := new(Recognize)
-	m.Message = NewEvent("SpeechRecognizer", "Recognize", messageId, dialogRequestId)
+	m.Message = newEvent("SpeechRecognizer", "Recognize", messageId, dialogRequestId)
 	m.Payload.Format = "AUDIO_L16_RATE_16000_CHANNELS_1"
 	m.Payload.Profile = "CLOSE_TALK"
 	return m
@@ -500,7 +500,7 @@ type SpeechFinished struct {
 
 func NewSpeechFinished(messageId, token string) *SpeechFinished {
 	m := new(SpeechFinished)
-	m.Message = NewEvent("SpeechSynthesizer", "SpeechFinished", messageId, "")
+	m.Message = newEvent("SpeechSynthesizer", "SpeechFinished", messageId, "")
 	m.Payload.Token = token
 	return m
 }
@@ -515,7 +515,7 @@ type SpeechStarted struct {
 
 func NewSpeechStarted(messageId, token string) *SpeechStarted {
 	m := new(SpeechStarted)
-	m.Message = NewEvent("SpeechSynthesizer", "SpeechStarted", messageId, "")
+	m.Message = newEvent("SpeechSynthesizer", "SpeechStarted", messageId, "")
 	m.Payload.Token = token
 	return m
 }
@@ -536,7 +536,7 @@ type ExceptionEncountered struct {
 
 func NewExceptionEncountered(messageId, directive string, errorType ErrorType, errorMessage string) *ExceptionEncountered {
 	m := new(ExceptionEncountered)
-	m.Message = NewEvent("System", "ExceptionEncountered", messageId, "")
+	m.Message = newEvent("System", "ExceptionEncountered", messageId, "")
 	m.Payload.UnparsedDirective = directive
 	m.Payload.Error.Type = errorType
 	m.Payload.Error.Message = errorMessage
@@ -551,7 +551,7 @@ type SynchronizeState struct {
 
 func NewSynchronizeState(messageId string) *SynchronizeState {
 	m := new(SynchronizeState)
-	m.Message = NewEvent("System", "SynchronizeState", messageId, "")
+	m.Message = newEvent("System", "SynchronizeState", messageId, "")
 	return m
 }
 
@@ -565,7 +565,7 @@ type UserInactivityReport struct {
 
 func NewUserInactivityReport(messageId string, inactiveTime time.Duration) *UserInactivityReport {
 	m := new(UserInactivityReport)
-	m.Message = NewEvent("System", "UserInactivityReport", messageId, "")
+	m.Message = newEvent("System", "UserInactivityReport", messageId, "")
 	m.Payload.InactiveTimeInSeconds = int(inactiveTime.Seconds())
 	return m
 }
