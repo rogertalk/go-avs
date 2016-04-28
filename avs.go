@@ -299,8 +299,8 @@ func (c *Client) Ping(accessToken string) error {
 	return err
 }
 
-// checkStatusCode checks the status code of the response and returns whether
-// the caller should expect there to be more content, as well as any error.
+// Checks the status code of the response and returns whether the caller should
+// expect there to be more content, as well as any error.
 //
 // This function should only be called before the body has been read.
 func checkStatusCode(resp *http.Response) (more bool, err error) {

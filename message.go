@@ -76,11 +76,12 @@ type Exception struct {
 	} `json:"payload"`
 }
 
+// Error returns the Exception formatted as a human readable string.
 func (m *Exception) Error() string {
 	return fmt.Sprintf("%s: %s", m.Payload.Code, m.Payload.Description)
 }
 
-// Convenience method to set up an empty typed message object from a raw Message.
+// Convenience function to set up an empty typed message object from a raw Message.
 func fill(dst TypedMessage, src *Message) TypedMessage {
 	v := reflect.ValueOf(dst).Elem()
 	v.FieldByName("Message").Set(reflect.ValueOf(src))
