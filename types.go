@@ -5,6 +5,13 @@ import (
 	"time"
 )
 
+// Alert represents a single alarm or timer with a scheduled time.
+type Alert struct {
+	Token         string    `json:"token"`
+	Type          AlertType `json:"type"`
+	ScheduledTime string    `json:"scheduledTime"`
+}
+
 // AlertType specifies the type of an alert.
 type AlertType string
 
