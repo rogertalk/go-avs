@@ -36,6 +36,8 @@ func (m *Message) String() string {
 }
 
 // Typed returns a more specific type for this message.
+//
+// This only parses directives as they're the only type of message sent by AVS.
 func (m *Message) Typed() TypedMessage {
 	switch m.String() {
 	case "Alerts.DeleteAlert":
@@ -59,9 +61,10 @@ func (m *Message) Typed() TypedMessage {
 	case "SpeechSynthesizer.Speak":
 		return fill(new(Speak), m)
 	case "System.Exception":
+		// Exception is not a directive, but may also be sent by AVS.
 		return fill(new(Exception), m)
-	case "System.SynchronizeState":
-		return fill(new(SynchronizeState), m)
+	case "System.ResetUserInactivity":
+		return fill(new(ResetUserInactivity), m)
 	default:
 		return m
 	}
