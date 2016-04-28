@@ -142,6 +142,235 @@ func NewSetAlertSucceeded(messageId, token string) *SetAlertSucceeded {
 	return m
 }
 
+/********** AudioPlayer **********/
+
+// The PlaybackFailed event.
+type PlaybackFailed struct {
+	*Message
+	Payload struct {
+		Token                string `json:"token"`
+		CurrentPlaybackState struct {
+			Token                string         `json:"token"`
+			OffsetInMilliseconds int            `json:"offsetInMilliseconds"`
+			PlayerActivity       PlayerActivity `json:"playerActivity"`
+		} `json:"currentPlaybackState"`
+		Error struct {
+			Type    MediaErrorType `json:"type"`
+			Message string         `json:"message"`
+		} `json:"error"`
+	} `json:"payload"`
+}
+
+func NewPlaybackFailed(messageId, token string, errorType MediaErrorType, errorMessage string) *PlaybackFailed {
+	m := new(PlaybackFailed)
+	m.Message = NewEvent("AudioPlayer", "PlaybackFailed", messageId, "")
+	m.Payload.Token = token
+	m.Payload.Error.Type = errorType
+	m.Payload.Error.Message = errorMessage
+	return m
+}
+
+// The PlaybackFinished event.
+type PlaybackFinished struct {
+	*Message
+	Payload struct {
+		Token                string `json:"token"`
+		OffsetInMilliseconds int    `json:"offsetInMilliseconds"`
+	} `json:"payload"`
+}
+
+func NewPlaybackFinished(messageId, token string, offset time.Duration) *PlaybackFinished {
+	m := new(PlaybackFinished)
+	m.Message = NewEvent("AudioPlayer", "PlaybackFinished", messageId, "")
+	m.Payload.Token = token
+	m.Payload.OffsetInMilliseconds = int(offset.Seconds() * 1000)
+	return m
+}
+
+// The PlaybackNearlyFinished event.
+type PlaybackNearlyFinished struct {
+	*Message
+	Payload struct {
+		Token                string `json:"token"`
+		OffsetInMilliseconds int    `json:"offsetInMilliseconds"`
+	} `json:"payload"`
+}
+
+func NewPlaybackNearlyFinished(messageId, token string, offset time.Duration) *PlaybackNearlyFinished {
+	m := new(PlaybackNearlyFinished)
+	m.Message = NewEvent("AudioPlayer", "PlaybackNearlyFinished", messageId, "")
+	m.Payload.Token = token
+	m.Payload.OffsetInMilliseconds = int(offset.Seconds() * 1000)
+	return m
+}
+
+// The PlaybackPaused event.
+type PlaybackPaused struct {
+	*Message
+	Payload struct {
+		Token                string `json:"token"`
+		OffsetInMilliseconds int    `json:"offsetInMilliseconds"`
+	} `json:"payload"`
+}
+
+func NewPlaybackPaused(messageId, token string, offset time.Duration) *PlaybackPaused {
+	m := new(PlaybackPaused)
+	m.Message = NewEvent("AudioPlayer", "PlaybackPaused", messageId, "")
+	m.Payload.Token = token
+	m.Payload.OffsetInMilliseconds = int(offset.Seconds() * 1000)
+	return m
+}
+
+// The PlaybackQueueCleared event.
+type PlaybackQueueCleared struct {
+	*Message
+	Payload struct{} `json:"payload"`
+}
+
+func NewPlaybackQueueCleared(messageId, token string, offset time.Duration) *PlaybackQueueCleared {
+	m := new(PlaybackQueueCleared)
+	m.Message = NewEvent("AudioPlayer", "PlaybackQueueCleared", messageId, "")
+	return m
+}
+
+// The PlaybackResumed event.
+type PlaybackResumed struct {
+	*Message
+	Payload struct {
+		Token                string `json:"token"`
+		OffsetInMilliseconds int    `json:"offsetInMilliseconds"`
+	} `json:"payload"`
+}
+
+func NewPlaybackResumed(messageId, token string, offset time.Duration) *PlaybackResumed {
+	m := new(PlaybackResumed)
+	m.Message = NewEvent("AudioPlayer", "PlaybackResumed", messageId, "")
+	m.Payload.Token = token
+	m.Payload.OffsetInMilliseconds = int(offset.Seconds() * 1000)
+	return m
+}
+
+// The PlaybackStarted event.
+type PlaybackStarted struct {
+	*Message
+	Payload struct {
+		Token                string `json:"token"`
+		OffsetInMilliseconds int    `json:"offsetInMilliseconds"`
+	} `json:"payload"`
+}
+
+func NewPlaybackStarted(messageId, token string, offset time.Duration) *PlaybackStarted {
+	m := new(PlaybackStarted)
+	m.Message = NewEvent("AudioPlayer", "PlaybackStarted", messageId, "")
+	m.Payload.Token = token
+	m.Payload.OffsetInMilliseconds = int(offset.Seconds() * 1000)
+	return m
+}
+
+// The PlaybackStopped event.
+type PlaybackStopped struct {
+	*Message
+	Payload struct {
+		Token                string `json:"token"`
+		OffsetInMilliseconds int    `json:"offsetInMilliseconds"`
+	} `json:"payload"`
+}
+
+func NewPlaybackStopped(messageId, token string, offset time.Duration) *PlaybackStopped {
+	m := new(PlaybackStopped)
+	m.Message = NewEvent("AudioPlayer", "PlaybackStopped", messageId, "")
+	m.Payload.Token = token
+	m.Payload.OffsetInMilliseconds = int(offset.Seconds() * 1000)
+	return m
+}
+
+// The PlaybackStutterStarted event.
+type PlaybackStutterStarted struct {
+	*Message
+	Payload struct {
+		Token                string `json:"token"`
+		OffsetInMilliseconds int    `json:"offsetInMilliseconds"`
+	} `json:"payload"`
+}
+
+func NewPlaybackStutterStarted(messageId, token string, offset time.Duration) *PlaybackStutterStarted {
+	m := new(PlaybackStutterStarted)
+	m.Message = NewEvent("AudioPlayer", "PlaybackStutterStarted", messageId, "")
+	m.Payload.Token = token
+	m.Payload.OffsetInMilliseconds = int(offset.Seconds() * 1000)
+	return m
+}
+
+// The PlaybackStutterFinished event.
+type PlaybackStutterFinished struct {
+	*Message
+	Payload struct {
+		Token                         string `json:"token"`
+		OffsetInMilliseconds          int    `json:"offsetInMilliseconds"`
+		StutterDurationInMilliseconds int    `json:"stutterDurationInMilliseconds"`
+	} `json:"payload"`
+}
+
+func NewPlaybackStutterFinished(messageId, token string, offset, stutterDuration time.Duration) *PlaybackStutterFinished {
+	m := new(PlaybackStutterFinished)
+	m.Message = NewEvent("AudioPlayer", "PlaybackStutterFinished", messageId, "")
+	m.Payload.Token = token
+	m.Payload.OffsetInMilliseconds = int(offset.Seconds() * 1000)
+	m.Payload.StutterDurationInMilliseconds = int(stutterDuration.Seconds() * 1000)
+	return m
+}
+
+// The ProgressReportDelayElapsed event.
+type ProgressReportDelayElapsed struct {
+	*Message
+	Payload struct {
+		Token                string `json:"token"`
+		OffsetInMilliseconds int    `json:"offsetInMilliseconds"`
+	} `json:"payload"`
+}
+
+func NewProgressReportDelayElapsed(messageId, token string, offset time.Duration) *ProgressReportDelayElapsed {
+	m := new(ProgressReportDelayElapsed)
+	m.Message = NewEvent("AudioPlayer", "ProgressReportDelayElapsed", messageId, "")
+	m.Payload.Token = token
+	m.Payload.OffsetInMilliseconds = int(offset.Seconds() * 1000)
+	return m
+}
+
+// The ProgressReportIntervalElapsed event.
+type ProgressReportIntervalElapsed struct {
+	*Message
+	Payload struct {
+		Token                string `json:"token"`
+		OffsetInMilliseconds int    `json:"offsetInMilliseconds"`
+	} `json:"payload"`
+}
+
+func NewProgressReportIntervalElapsed(messageId, token string, offset time.Duration) *ProgressReportIntervalElapsed {
+	m := new(ProgressReportIntervalElapsed)
+	m.Message = NewEvent("AudioPlayer", "ProgressReportIntervalElapsed", messageId, "")
+	m.Payload.Token = token
+	m.Payload.OffsetInMilliseconds = int(offset.Seconds() * 1000)
+	return m
+}
+
+// The StreamMetadataExtracted event.
+type StreamMetadataExtracted struct {
+	*Message
+	Payload struct {
+		Token    string                 `json:"token"`
+		Metadata map[string]interface{} `json:"metadata"`
+	} `json:"payload"`
+}
+
+func NewStreamMetadataExtracted(messageId, token string, metadata map[string]interface{}) *StreamMetadataExtracted {
+	m := new(StreamMetadataExtracted)
+	m.Message = NewEvent("AudioPlayer", "StreamMetadataExtracted", messageId, "")
+	m.Payload.Token = token
+	m.Payload.Metadata = metadata
+	return m
+}
+
 /********** Speaker **********/
 
 // The MuteChanged event.

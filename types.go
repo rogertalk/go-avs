@@ -60,6 +60,16 @@ const (
 	ErrorTypeUnsupportedOperation = ErrorType("UNSUPPORTED_OPERATION")
 )
 
+type MediaErrorType string
+
+const (
+	MediaErrorTypeInternalDeviceError = MediaErrorType("MEDIA_ERROR_INTERNAL_DEVICE_ERROR")
+	MediaErrorTypeInternalServerError = MediaErrorType("MEDIA_ERROR_INTERNAL_SERVER_ERROR")
+	MediaErrorTypeInvalidRequest      = MediaErrorType("MEDIA_ERROR_INVALID_REQUEST")
+	MediaErrorTypeServiceUnavailable  = MediaErrorType("MEDIA_ERROR_SERVICE_UNAVAILABLE")
+	MediaErrorTypeUnknown             = MediaErrorType("MEDIA_ERROR_UNKNOWN")
+)
+
 // PlayBehavior specifies how an audio item should be inserted into the play
 // queue.
 type PlayBehavior string
