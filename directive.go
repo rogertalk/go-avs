@@ -86,6 +86,12 @@ func (m *ExpectSpeech) Timeout() time.Duration {
 	return time.Duration(m.Payload.TimeoutInMilliseconds) * time.Millisecond
 }
 
+// The StopCapture directive.
+type StopCapture struct {
+	*Message
+	Payload struct{} `json:"payload"`
+}
+
 /********** SpeechSynthesizer **********/
 
 // The Speak directive.

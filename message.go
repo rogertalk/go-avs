@@ -58,6 +58,8 @@ func (m *Message) Typed() TypedMessage {
 		return fill(new(SetVolume), m)
 	case "SpeechRecognizer.ExpectSpeech":
 		return fill(new(ExpectSpeech), m)
+	case "SpeechRecognizer.StopCapture":
+		return fill(new(StopCapture), m)
 	case "SpeechSynthesizer.Speak":
 		return fill(new(Speak), m)
 	case "System.Exception":
