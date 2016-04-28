@@ -1,6 +1,8 @@
 Alexa Voice Service for Go
 ==========================
 
+[![GoDoc](https://godoc.org/github.com/rogertalk/go-avs?status.svg)](https://godoc.org/github.com/rogertalk/go-avs)
+
 A simple package for communicating with Amazon’s HTTP/2 API for AVS.
 
 Requires Go 1.6 or later.
