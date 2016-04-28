@@ -209,6 +209,38 @@ func NewRecognize(messageId, dialogRequestId string) *Recognize {
 	return m
 }
 
+/********** SpeechSynthesizer **********/
+
+// The SpeechFinished event.
+type SpeechFinished struct {
+	*Message
+	Payload struct {
+		Token string `json:"token"`
+	} `json:"payload"`
+}
+
+func NewSpeechFinished(messageId, token string) *SpeechFinished {
+	m := new(SpeechFinished)
+	m.Message = NewEvent("SpeechSynthesizer", "SpeechFinished", messageId, "")
+	m.Payload.Token = token
+	return m
+}
+
+// The SpeechStarted event.
+type SpeechStarted struct {
+	*Message
+	Payload struct {
+		Token string `json:"token"`
+	} `json:"payload"`
+}
+
+func NewSpeechStarted(messageId, token string) *SpeechStarted {
+	m := new(SpeechStarted)
+	m.Message = NewEvent("SpeechSynthesizer", "SpeechStarted", messageId, "")
+	m.Payload.Token = token
+	return m
+}
+
 /********** System **********/
 
 // The ExceptionEncountered event.
