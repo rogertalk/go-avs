@@ -195,7 +195,7 @@ func (c *Client) CreateDownchannel(accessToken string) (<-chan TypedMessage, err
 	return directives, nil
 }
 
-// Do posts a request to the AVS service.
+// Do posts a request to the AVS service's /events endpoint.
 func (c *Client) Do(request *Request) (*Response, error) {
 	body := &bytes.Buffer{}
 	writer := multipart.NewWriter(body)
@@ -213,10 +213,10 @@ func (c *Client) Do(request *Request) (*Response, error) {
 		if err != nil {
 			return nil, err
 		}
-		err = writer.Close()
-		if err != nil {
-			return nil, err
-		}
+	}
+	err = writer.Close()
+	if err != nil {
+		return nil, err
 	}
 	// Send the request to AVS.
 	req, err := http.NewRequest("POST", EventsURL, body)
