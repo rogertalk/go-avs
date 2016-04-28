@@ -371,6 +371,56 @@ func NewStreamMetadataExtracted(messageId, token string, metadata map[string]int
 	return m
 }
 
+/********** PlaybackController **********/
+
+// The NextCommandIssued event.
+type NextCommandIssued struct {
+	*Message
+	Payload struct{} `json:"payload"`
+}
+
+func NewNextCommandIssued(messageId string) *NextCommandIssued {
+	m := new(NextCommandIssued)
+	m.Message = NewEvent("PlaybackController", "NextCommandIssued", messageId, "")
+	return m
+}
+
+// The PauseCommandIssued event.
+type PauseCommandIssued struct {
+	*Message
+	Payload struct{} `json:"payload"`
+}
+
+func NewPauseCommandIssued(messageId string) *PauseCommandIssued {
+	m := new(PauseCommandIssued)
+	m.Message = NewEvent("PlaybackController", "PauseCommandIssued", messageId, "")
+	return m
+}
+
+// The PlayCommandIssued event.
+type PlayCommandIssued struct {
+	*Message
+	Payload struct{} `json:"payload"`
+}
+
+func NewPlayCommandIssued(messageId string) *PlayCommandIssued {
+	m := new(PlayCommandIssued)
+	m.Message = NewEvent("PlaybackController", "PlayCommandIssued", messageId, "")
+	return m
+}
+
+// The PreviousCommandIssued event.
+type PreviousCommandIssued struct {
+	*Message
+	Payload struct{} `json:"payload"`
+}
+
+func NewPreviousCommandIssued(messageId string) *PreviousCommandIssued {
+	m := new(PreviousCommandIssued)
+	m.Message = NewEvent("PlaybackController", "PreviousCommandIssued", messageId, "")
+	return m
+}
+
 /********** Speaker **********/
 
 // The MuteChanged event.
