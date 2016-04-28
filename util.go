@@ -40,10 +40,10 @@ func NewUUID() (UUID, error) {
 	return UUID(b), nil
 }
 
-func GetUUIDString() string {
+func RandomUUIDString() string {
 	uuid, err := NewUUID()
 	if err != nil {
-		panic("GetUUIDString: unable to create UUID")
+		panic("RandomUUIDString: unable to create UUID")
 	}
 	return uuid.String()
 }
