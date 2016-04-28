@@ -90,7 +90,7 @@ import (
 const ACCESS_TOKEN = "YOUR ACCESS TOKEN"
 
 func main() {
-  directives, err := avs.DefaultClient.CreateDownchannel(ACCESS_TOKEN)
+  directives, err := avs.CreateDownchannel(ACCESS_TOKEN)
   if err != nil {
     fmt.Printf("Failed to open downchannel: %v\n", err)
     return
