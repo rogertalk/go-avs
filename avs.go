@@ -58,12 +58,13 @@ import (
 
 // The different endpoints that are supported by the AVS API.
 const (
-	// EndpointURL is the base endpoint URL for the API, including version.
+	// EndpointURL is the base endpoint URL for the AVS API.
 	// You can find the latest versioning information on the AVS API overview page:
 	// https://developer.amazon.com/public/solutions/alexa/alexa-voice-service/content/avs-api-overview
-	EndpointURL   = "https://avs-alexa-na.amazon.com/v20160207"
-	DirectivesURL = EndpointURL + "/directives"
-	EventsURL     = EndpointURL + "/events"
+	EndpointURL   = "https://avs-alexa-na.amazon.com"
+	Version       = "/v20160207"
+	DirectivesURL = EndpointURL + Version + "/directives"
+	EventsURL     = EndpointURL + Version + "/events"
 	PingURL       = EndpointURL + "/ping"
 )
 
