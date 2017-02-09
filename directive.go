@@ -100,6 +100,7 @@ type Speak struct {
 	Payload struct {
 		Format string `json:"format"`
 		URL    string `json:"url"`
+		Token  string `json:"token"`
 	} `json:"payload"`
 }
 
