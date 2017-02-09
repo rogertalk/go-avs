@@ -471,20 +471,36 @@ func NewExpectSpeechTimedOut(messageId string) *ExpectSpeechTimedOut {
 	return m
 }
 
+
+// RecognizeProfile identifies the ASR profile associated with your product.
+type RecognizeProfile string
+
+// Possible values for RecognizeProfile.
+// Supports three distinct profiles optimized for speech at varying distances.
+const (
+	RecognizeProfileCloseTalk = RecognizeProfile("CLOSE_TALK")
+	RecognizeProfileNearField = RecognizeProfile("NEAR_FIELD")
+	RecognizeProfileFarField  = RecognizeProfile("FAR_FIELD")
+)
+
 // The Recognize event.
 type Recognize struct {
 	*Message
 	Payload struct {
-		Profile string `json:"profile"`
-		Format  string `json:"format"`
+		Profile RecognizeProfile `json:"profile"`
+		Format  string           `json:"format"`
 	} `json:"payload"`
 }
 
 func NewRecognize(messageId, dialogRequestId string) *Recognize {
+	return NewRecognizeWithProfile(messageId, dialogRequestId, RecognizeProfileCloseTalk)
+}
+
+func NewRecognizeWithProfile(messageId, dialogRequestId string, profile RecognizeProfile) *Recognize {
 	m := new(Recognize)
 	m.Message = newEvent("SpeechRecognizer", "Recognize", messageId, dialogRequestId)
 	m.Payload.Format = "AUDIO_L16_RATE_16000_CHANNELS_1"
-	m.Payload.Profile = "CLOSE_TALK"
+	m.Payload.Profile = profile
 	return m
 }
 
