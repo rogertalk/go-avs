@@ -1,7 +1,6 @@
 package avs
 
 import (
-	"bytes"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -67,27 +66,35 @@ func (c *Client) CreateDownchannel(accessToken string) (<-chan *Message, error) 
 
 // Do posts a request to the AVS service's /events endpoint.
 func (c *Client) Do(request *Request) (*Response, error) {
-	body := &bytes.Buffer{}
-	writer := multipart.NewWriter(body)
-	err := writeJSON(writer, "metadata", request)
-	if err != nil {
-		return nil, err
-	}
-	if request.Audio != nil {
-		p, err := writer.CreateFormFile("audio", "audio.wav")
+	body, bodyIn := io.Pipe()
+	writer := multipart.NewWriter(bodyIn)
+	go func() {
+		// Write to pipe must be parallel to allow HTTP request to read
+		err := writeJSON(writer, "metadata", request)
 		if err != nil {
-			return nil, err
+			bodyIn.CloseWithError(err)
+			return
 		}
-		// TODO: Write the audio data directly to the HTTP/2 socket for faster delivery.
-		_, err = io.Copy(p, request.Audio)
+		if request.Audio != nil {
+			p, err := writer.CreateFormFile("audio", "audio.wav")
+			if err != nil {
+				bodyIn.CloseWithError(err)
+				return
+			}
+			// Run io.Copy in goroutine so audio can be streamed
+			_, err = io.Copy(p, request.Audio)
+			if err != nil {
+				bodyIn.CloseWithError(err)
+				return
+			}
+		}
+		err = writer.Close()
 		if err != nil {
-			return nil, err
+			bodyIn.CloseWithError(err)
+			return
 		}
-	}
-	err = writer.Close()
-	if err != nil {
-		return nil, err
-	}
+		bodyIn.Close()
+	}()
 	// Send the request to AVS.
 	req, err := http.NewRequest("POST", EventsURL, body)
 	if err != nil {
