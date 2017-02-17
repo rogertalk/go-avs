@@ -95,6 +95,7 @@ const (
 	PlayerActivityBufferUnderrun = PlayerActivity("BUFFER_UNDERRUN")
 	PlayerActivityIdle           = PlayerActivity("IDLE")
 	PlayerActivityPaused         = PlayerActivity("PAUSED")
+	PlayerActivityStopped        = PlayerActivity("STOPPED")
 	PlayerActivityPlaying        = PlayerActivity("PLAYING")
 	PlayerActivityFinished       = PlayerActivity("FINISHED")
 )
