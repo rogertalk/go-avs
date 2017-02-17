@@ -115,11 +115,12 @@ func (p *ProgressReport) Delay() time.Duration {
 
 // An audio stream which can either be attached with the response or a remote URL.
 type Stream struct {
-	ExpiryTime           string         `json:"expiryTime"`
-	OffsetInMilliseconds float64        `json:"offsetInMilliseconds"`
-	ProgressReport       ProgressReport `json:"progressReport"`
-	Token                string         `json:"token"`
-	URL                  string         `json:"url"`
+	ExpiryTime            string         `json:"expiryTime"`
+	OffsetInMilliseconds  float64        `json:"offsetInMilliseconds"`
+	ProgressReport        ProgressReport `json:"progressReport"`
+	Token                 string         `json:"token"`
+	ExpectedPreviousToken string         `json:"expectedPreviousToken"`
+	URL                   string         `json:"url"`
 }
 
 // ContentId returns the content id of the audio, if it's attached with the
