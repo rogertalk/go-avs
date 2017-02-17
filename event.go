@@ -227,7 +227,7 @@ type PlaybackQueueCleared struct {
 	Payload struct{} `json:"payload"`
 }
 
-func NewPlaybackQueueCleared(messageId, token string, offset time.Duration) *PlaybackQueueCleared {
+func NewPlaybackQueueCleared(messageId string) *PlaybackQueueCleared {
 	m := new(PlaybackQueueCleared)
 	m.Message = newEvent("AudioPlayer", "PlaybackQueueCleared", messageId, "")
 	return m
