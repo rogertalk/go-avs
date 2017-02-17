@@ -102,10 +102,15 @@ const (
 
 type ProgressReport struct {
 	ProgressReportIntervalInMilliseconds float64 `json:"progressReportIntervalInMilliseconds"`
+	ProgressReportDelayInMilliseconds    float64 `json:"progressReportDelayInMilliseconds"`
 }
 
 func (p *ProgressReport) Interval() time.Duration {
 	return time.Duration(p.ProgressReportIntervalInMilliseconds) * time.Millisecond
+}
+
+func (p *ProgressReport) Delay() time.Duration {
+	return time.Duration(p.ProgressReportDelayInMilliseconds) * time.Millisecond
 }
 
 // An audio stream which can either be attached with the response or a remote URL.
