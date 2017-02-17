@@ -538,6 +538,39 @@ func NewSpeechStarted(messageId, token string) *SpeechStarted {
 	return m
 }
 
+/********** Settings **********/
+
+// The SettingsUpdated event.
+type Setting struct {
+	Key   string `json:"key"`
+	Value string `json:"value"`
+}
+
+type SettingsUpdated struct {
+	*Message
+	Payload struct {
+		Settings []Setting `json:"settings"`
+	} `json:"payload"`
+}
+
+type SettingLocale string
+// Possible values for SettingLocale.
+const (
+	SettingLocaleUS = SettingLocale("en-US")
+	SettingLocaleGB = SettingLocale("en-GB")
+	SettingLocaleDE = SettingLocale("de-DE")
+)
+
+func NewLocaleSettingsUpdated(messageId string, locale SettingLocale) *SettingsUpdated {
+	m := new(SettingsUpdated)
+	m.Message = newEvent("Settings", "SettingsUpdated", messageId, "")
+	m.Payload.Settings = append(m.Payload.Settings, Setting{
+		Key: "locale",
+		Value: string(locale),
+	})
+	return m
+}
+
 /********** System **********/
 
 // The ExceptionEncountered event.
