@@ -17,12 +17,13 @@ type responsePart struct {
 
 // Client enables making requests and creating downchannels to AVS.
 type Client struct {
+	EndpointURL string
 }
 
 // CreateDownchannel establishes a persistent connection with AVS and returns a
 // read-only channel through which AVS will deliver directives.
 func (c *Client) CreateDownchannel(accessToken string) (<-chan *Message, error) {
-	req, err := http.NewRequest("GET", DirectivesURL, nil)
+	req, err := http.NewRequest("GET", c.EndpointURL + DirectivesPath, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -96,7 +97,7 @@ func (c *Client) Do(request *Request) (*Response, error) {
 		bodyIn.Close()
 	}()
 	// Send the request to AVS.
-	req, err := http.NewRequest("POST", EventsURL, body)
+	req, err := http.NewRequest("POST", c.EndpointURL + EventsPath, body)
 	if err != nil {
 		return nil, err
 	}
@@ -167,7 +168,7 @@ func (c *Client) Do(request *Request) (*Response, error) {
 // still alive.
 func (c *Client) Ping(accessToken string) error {
 	// TODO: Once Go supports sending PING frames, that would be a better alternative.
-	req, err := http.NewRequest("GET", PingURL, nil)
+	req, err := http.NewRequest("GET", c.EndpointURL + PingPath, nil)
 	if err != nil {
 		return err
 	}

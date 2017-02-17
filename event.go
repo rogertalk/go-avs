@@ -143,17 +143,19 @@ func NewSetAlertSucceeded(messageId, token string) *SetAlertSucceeded {
 }
 
 /********** AudioPlayer **********/
+// Also used by the PlaybackState context.
+type playbackState struct {
+	Token                string         `json:"token"`
+	OffsetInMilliseconds int            `json:"offsetInMilliseconds"`
+	PlayerActivity       PlayerActivity `json:"playerActivity"`
+}
 
 // The PlaybackFailed event.
 type PlaybackFailed struct {
 	*Message
 	Payload struct {
-		Token                string `json:"token"`
-		CurrentPlaybackState struct {
-			Token                string         `json:"token"`
-			OffsetInMilliseconds int            `json:"offsetInMilliseconds"`
-			PlayerActivity       PlayerActivity `json:"playerActivity"`
-		} `json:"currentPlaybackState"`
+		Token                string        `json:"token"`
+		CurrentPlaybackState playbackState `json:"currentPlaybackState"`
 		Error struct {
 			Type    MediaErrorType `json:"type"`
 			Message string         `json:"message"`
@@ -227,7 +229,7 @@ type PlaybackQueueCleared struct {
 	Payload struct{} `json:"payload"`
 }
 
-func NewPlaybackQueueCleared(messageId, token string, offset time.Duration) *PlaybackQueueCleared {
+func NewPlaybackQueueCleared(messageId string) *PlaybackQueueCleared {
 	m := new(PlaybackQueueCleared)
 	m.Message = newEvent("AudioPlayer", "PlaybackQueueCleared", messageId, "")
 	return m
@@ -533,6 +535,39 @@ func NewSpeechStarted(messageId, token string) *SpeechStarted {
 	m := new(SpeechStarted)
 	m.Message = newEvent("SpeechSynthesizer", "SpeechStarted", messageId, "")
 	m.Payload.Token = token
+	return m
+}
+
+/********** Settings **********/
+
+// The SettingsUpdated event.
+type Setting struct {
+	Key   string `json:"key"`
+	Value string `json:"value"`
+}
+
+type SettingsUpdated struct {
+	*Message
+	Payload struct {
+		Settings []Setting `json:"settings"`
+	} `json:"payload"`
+}
+
+type SettingLocale string
+// Possible values for SettingLocale.
+const (
+	SettingLocaleUS = SettingLocale("en-US")
+	SettingLocaleGB = SettingLocale("en-GB")
+	SettingLocaleDE = SettingLocale("de-DE")
+)
+
+func NewLocaleSettingsUpdated(messageId string, locale SettingLocale) *SettingsUpdated {
+	m := new(SettingsUpdated)
+	m.Message = newEvent("Settings", "SettingsUpdated", messageId, "")
+	m.Payload.Settings = append(m.Payload.Settings, Setting{
+		Key: "locale",
+		Value: string(locale),
+	})
 	return m
 }
 

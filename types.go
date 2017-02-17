@@ -95,25 +95,32 @@ const (
 	PlayerActivityBufferUnderrun = PlayerActivity("BUFFER_UNDERRUN")
 	PlayerActivityIdle           = PlayerActivity("IDLE")
 	PlayerActivityPaused         = PlayerActivity("PAUSED")
+	PlayerActivityStopped        = PlayerActivity("STOPPED")
 	PlayerActivityPlaying        = PlayerActivity("PLAYING")
 	PlayerActivityFinished       = PlayerActivity("FINISHED")
 )
 
 type ProgressReport struct {
 	ProgressReportIntervalInMilliseconds float64 `json:"progressReportIntervalInMilliseconds"`
+	ProgressReportDelayInMilliseconds    float64 `json:"progressReportDelayInMilliseconds"`
 }
 
 func (p *ProgressReport) Interval() time.Duration {
 	return time.Duration(p.ProgressReportIntervalInMilliseconds) * time.Millisecond
 }
 
+func (p *ProgressReport) Delay() time.Duration {
+	return time.Duration(p.ProgressReportDelayInMilliseconds) * time.Millisecond
+}
+
 // An audio stream which can either be attached with the response or a remote URL.
 type Stream struct {
-	ExpiryTime           string         `json:"expiryTime"`
-	OffsetInMilliseconds float64        `json:"offsetInMilliseconds"`
-	ProgressReport       ProgressReport `json:"progressReport"`
-	Token                string         `json:"token"`
-	URL                  string         `json:"url"`
+	ExpiryTime            string         `json:"expiryTime"`
+	OffsetInMilliseconds  float64        `json:"offsetInMilliseconds"`
+	ProgressReport        ProgressReport `json:"progressReport"`
+	Token                 string         `json:"token"`
+	ExpectedPreviousToken string         `json:"expectedPreviousToken"`
+	URL                   string         `json:"url"`
 }
 
 // ContentId returns the content id of the audio, if it's attached with the

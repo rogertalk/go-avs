@@ -65,6 +65,8 @@ func (m *Message) Typed() TypedMessage {
 	case "System.Exception":
 		// Exception is not a directive, but may also be sent by AVS.
 		return fill(new(Exception), m)
+	case "System.SetEndpoint":
+		return fill(new(SetEndpoint), m)
 	case "System.ResetUserInactivity":
 		return fill(new(ResetUserInactivity), m)
 	default:

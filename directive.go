@@ -113,6 +113,14 @@ func (m *Speak) ContentId() string {
 
 /********** System **********/
 
+// The SetEndpoint directive.
+type SetEndpoint struct {
+	*Message
+	Payload struct {
+		Endpoint string `json:"endpoint"`
+	} `json:"payload"`
+}
+
 // The ResetUserInactivity directive.
 type ResetUserInactivity struct {
 	*Message
