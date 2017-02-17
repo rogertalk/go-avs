@@ -39,11 +39,7 @@ func NewAlertsState(allAlerts, activeAlerts []Alert) *AlertsState {
 // The PlaybackState context.
 type PlaybackState struct {
 	*Message
-	Payload struct {
-		Token                string         `json:"token"`
-		OffsetInMilliseconds int            `json:"offsetInMilliseconds"`
-		PlayerActivity       PlayerActivity `json:"playerActivity"`
-	} `json:"payload"`
+	Payload playbackState `json:"payload"`
 }
 
 func NewPlaybackState(token string, offset time.Duration, activity PlayerActivity) *PlaybackState {

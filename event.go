@@ -143,17 +143,19 @@ func NewSetAlertSucceeded(messageId, token string) *SetAlertSucceeded {
 }
 
 /********** AudioPlayer **********/
+// Also used by the PlaybackState context.
+type playbackState struct {
+	Token                string         `json:"token"`
+	OffsetInMilliseconds int            `json:"offsetInMilliseconds"`
+	PlayerActivity       PlayerActivity `json:"playerActivity"`
+}
 
 // The PlaybackFailed event.
 type PlaybackFailed struct {
 	*Message
 	Payload struct {
-		Token                string `json:"token"`
-		CurrentPlaybackState struct {
-			Token                string         `json:"token"`
-			OffsetInMilliseconds int            `json:"offsetInMilliseconds"`
-			PlayerActivity       PlayerActivity `json:"playerActivity"`
-		} `json:"currentPlaybackState"`
+		Token                string        `json:"token"`
+		CurrentPlaybackState playbackState `json:"currentPlaybackState"`
 		Error struct {
 			Type    MediaErrorType `json:"type"`
 			Message string         `json:"message"`
