@@ -58,18 +58,19 @@ import (
 
 // The different endpoints that are supported by the AVS API.
 const (
-	// EndpointURL is the base endpoint URL for the AVS API.
 	// You can find the latest versioning information on the AVS API overview page:
 	// https://developer.amazon.com/public/solutions/alexa/alexa-voice-service/content/avs-api-overview
-	EndpointURL   = "https://avs-alexa-na.amazon.com"
-	Version       = "/v20160207"
-	DirectivesURL = EndpointURL + Version + "/directives"
-	EventsURL     = EndpointURL + Version + "/events"
-	PingURL       = EndpointURL + "/ping"
+	Version        = "/v20160207"
+	DirectivesPath = Version + "/directives"
+	EventsPath     = Version + "/events"
+	PingPath       = "/ping"
 )
 
 // DefaultClient is the default Client.
-var DefaultClient = &Client{}
+var DefaultClient = &Client{
+	// EndpointURL is the base endpoint URL for the AVS API.
+	EndpointURL: "https://avs-alexa-na.amazon.com",
+}
 
 // CreateDownchannel establishes a persistent connection with AVS and returns a
 // read-only channel through which AVS will deliver directives.
