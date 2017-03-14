@@ -1,7 +1,7 @@
 Alexa Voice Service for Go
 ==========================
 
-[![GoDoc](https://godoc.org/github.com/rogertalk/go-avs?status.svg)](https://godoc.org/github.com/rogertalk/go-avs)
+[![GoDoc](https://godoc.org/github.com/fika-io/go-avs?status.svg)](https://godoc.org/github.com/fika-io/go-avs)
 
 A simple package for communicating with Amazon’s HTTP/2 API for AVS.
 
@@ -19,7 +19,7 @@ import (
   "io/ioutil"
   "os"
 
-  "github.com/rogertalk/go-avs"
+  "github.com/fika-io/go-avs"
 )
 
 // Put your access token below.
@@ -83,7 +83,7 @@ package main
 import (
   "fmt"
 
-  "github.com/rogertalk/go-avs"
+  "github.com/fika-io/go-avs"
 )
 
 // Put your access token below.
