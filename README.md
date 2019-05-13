@@ -1,15 +1,12 @@
-Alexa Voice Service for Go
-==========================
+# Alexa Voice Service for Go
 
 [![GoDoc](https://godoc.org/github.com/fika-io/go-avs?status.svg)](https://godoc.org/github.com/fika-io/go-avs)
 
 A simple package for communicating with Amazon’s HTTP/2 API for AVS.
 
-Requires Go 1.6 or later.
+Requires Go 1.8 or later.
 
-
-Example
--------
+## Example
 
 ```go
 package main
@@ -70,9 +67,7 @@ func save(resp *avs.Response, cid string) {
 }
 ```
 
-
-Downchannels
-------------
+## Downchannels
 
 You can open a downchannel with the `CreateDownchannel` method. It's implemented
 as a read-only channel of `Message` pointers.

@@ -10,8 +10,6 @@ import (
 	"net/http"
 	"net/textproto"
 	"strings"
-
-	"github.com/fika-io/go-avs/multipart2"
 )
 
 var quoteEscaper = strings.NewReplacer("\\", "\\\\", `"`, "\\\"")
@@ -48,7 +46,7 @@ func RandomUUIDString() string {
 	return uuid.String()
 }
 
-func newMultipartReaderFromResponse(resp *http.Response) (*multipart2.Reader, error) {
+func newMultipartReaderFromResponse(resp *http.Response) (*multipart.Reader, error) {
 	// Work around bug in Amazon's downchannel server.
 	contentType := strings.Replace(resp.Header.Get("Content-Type"), "type=application/json", `type="application/json"`, 1)
 	mediatype, params, err := mime.ParseMediaType(contentType)
@@ -58,7 +56,7 @@ func newMultipartReaderFromResponse(resp *http.Response) (*multipart2.Reader, er
 	if !strings.HasPrefix(mediatype, "multipart/") {
 		return nil, fmt.Errorf("unexpected content type %s", mediatype)
 	}
-	return multipart2.NewReader(resp.Body, params["boundary"]), nil
+	return multipart.NewReader(resp.Body, params["boundary"]), nil
 }
 
 func escapeQuotes(s string) string {
