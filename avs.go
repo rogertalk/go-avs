@@ -69,7 +69,7 @@ const (
 // DefaultClient is the default Client.
 var DefaultClient = &Client{
 	// EndpointURL is the base endpoint URL for the AVS API.
-	EndpointURL: "https://avs-alexa-na.amazon.com",
+	EndpointURL: "https://alexa.na.gateway.devices.a2z.com",
 }
 
 // CreateDownchannel establishes a persistent connection with AVS and returns a
@@ -80,6 +80,12 @@ func CreateDownchannel(accessToken string) (<-chan *Message, error) {
 	return DefaultClient.CreateDownchannel(accessToken)
 }
 
+// use Ping to keep  downChannel alive
+//
+// Ping is a wrapper around DefaultClient.Ping.
+func Ping(accessToken string)  error {
+	return DefaultClient.Ping(accessToken)
+}
 // PostEvent will post an event to AVS.
 //
 // PostEvent is a wrapper around DefaultClient.Do.
