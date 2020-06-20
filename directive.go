@@ -126,3 +126,12 @@ type ResetUserInactivity struct {
 	*Message
 	Payload struct{} `json:"payload"`
 }
+
+// The ResetUserInactivity directive.
+type RenderTemplate struct {
+	*Message
+	Payload struct{
+	   Token string `json:"token"`
+       Type string `json:"type"`
+	} `json:"payload"`
+}

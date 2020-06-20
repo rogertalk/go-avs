@@ -80,7 +80,7 @@ func CreateDownchannel(accessToken string) (<-chan *Message, error) {
 	return DefaultClient.CreateDownchannel(accessToken)
 }
 
-// use Ping to keep  downChannel alive
+// use Ping to keep downChannel alive
 //
 // Ping is a wrapper around DefaultClient.Ping.
 func Ping(accessToken string)  error {

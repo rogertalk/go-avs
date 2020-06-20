@@ -69,6 +69,8 @@ func (m *Message) Typed() TypedMessage {
 		return fill(new(SetEndpoint), m)
 	case "System.ResetUserInactivity":
 		return fill(new(ResetUserInactivity), m)
+	case "TemplateRuntime.RenderTemplate":
+		return fill(new(RenderTemplate), m)
 	default:
 		return m
 	}
